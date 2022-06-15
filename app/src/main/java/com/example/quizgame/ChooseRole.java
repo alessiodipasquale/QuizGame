@@ -7,24 +7,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity{
-
+public class ChooseRole extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_choose_role);
         instantiateButton();
     }
 
     public void instantiateButton() {
-        Button btn = (Button) findViewById(R.id.startPlay);
+        Button btn = (Button) findViewById(R.id.MasterBtn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ChooseRole.class));
+                startActivity(new Intent(ChooseRole.this, ConfigureGame.class));
             }
         });
     }
-
 }
