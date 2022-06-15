@@ -47,6 +47,7 @@
         android:background="@drawable/gradient_red"
         android:fontFamily="@font/roboto_bold"
         android:text="Inizia a Giocare"
+        android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"

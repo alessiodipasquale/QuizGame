@@ -15,10 +15,11 @@
         android:background="@drawable/gradient_red"
         android:fontFamily="@font/roboto_bold"
         android:text="Fai il Master"
+        android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintBottom_toTopOf="@+id/PlayerBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,13 +27,14 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/PlayerBtn"
         android:layout_width="310dp"
         android:layout_height="54dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/gradient_blue"
         android:fontFamily="@font/roboto_bold"
         android:text="Fai il Giocatore"
+        android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
