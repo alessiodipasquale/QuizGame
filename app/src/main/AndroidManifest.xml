@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".EditQeA"
+            android:exported="false" />
+        <activity
             android:name=".GameScreen"
             android:exported="false" />
         <activity
