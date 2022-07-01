@@ -4,18 +4,28 @@ import java.util.function.Function;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class SocketIoManager {
     private static Socket socket = null;
 
-    public void connect() {
+    public void connect(String ip) {
         try {
             if (this.socket == null) {
-                this.socket = IO.socket("http://192.168.1.57:3000");
+                System.out.println(ip);
+                this.socket = IO.socket(ip);
                 this.socket.connect();
+            } else {
+                if (!this.socket.connected()) {
+                    this.socket = null;
+                    this.connect(ip);
+                } else {
+                    System.out.println("Already exists");
+                }
             }
         } catch (URISyntaxException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+            throw new Error();
         }
     }
 

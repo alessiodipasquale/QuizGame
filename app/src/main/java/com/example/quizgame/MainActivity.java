@@ -3,12 +3,17 @@ package com.example.quizgame;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 import io.socket.client.Socket;
 
@@ -29,10 +34,21 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 if(isConnected()) {
-                    Toast.makeText(getApplicationContext(), "INTERNET AVAILABLE", Toast.LENGTH_SHORT).show();
-                    SocketIoManager ioManager = new SocketIoManager();
-                    ioManager.connect();
-                    Socket io = ioManager.getSocket();
+                    //Toast.makeText(getApplicationContext(), "INTERNET AVAILABLE", Toast.LENGTH_SHORT).show();
+                    try {
+                        SocketIoManager ioManager = new SocketIoManager();
+                        EditText ipAddress = (EditText) findViewById(R.id.etIpAddress);
+                        if (ioManager.getSocket()!= null && ioManager.getSocket().connected()) {
+                            startActivity(new Intent(MainActivity.this, ChooseRole.class));
+                        }
+                        ioManager.connect(ipAddress.getText().toString());
+                        ioManager.getSocket().on(Socket.EVENT_CONNECT, (ok) -> {
+                            startActivity(new Intent(MainActivity.this, ChooseRole.class));
+                        });
+                    } catch (Error e) {
+                        // TODO Auto-generated catch block
+                        Toast.makeText(getApplicationContext(), "Error while connecting to the socket", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), "INTERNET NOT AVAILABLE", Toast.LENGTH_SHORT).show();
                 }
