@@ -13,52 +13,73 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+
+import io.socket.client.Ack;
 
 public class ChooseLobby extends AppCompatActivity {
-    List<String> items = new ArrayList<String>() {
-        {
-            add("Partita 1");
-            add("Partita 2");
-            add("Partita 3");
-            add("Partita 1");
-            add("Partita 2");
-            add("Partita 3");
-            add("Partita 1");
-            add("Partita 2");
-            add("Partita 3");
-        }
-    };
+    JSONArray items;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        SocketIoManager ioManager = new SocketIoManager();
+        ioManager.getSocket().emit("getJoinableGames", null, args -> {
+
+            JSONArray response = (JSONArray) args[0];
+
+            this.items = response;
+            //System.out.println(response.getJSONObject(0).get("name"));
+        });
+
+        ioManager.getSocket().on("newJoinableGame",  args -> {
+
+            JSONArray response = (JSONArray) args[0];
+
+            System.out.println(response);
+            //System.out.println(response.getJSONObject(0).get("name"));
+        });
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_lobby);
 
         LinearLayout lobbiesContainer = findViewById(R.id.lobbiesContainer);
-        for (int i=0; i<items.size(); i++) {
+        for (int i=0; i<items.length(); i++) {
+            try {
             Button btn = new Button(this);
-            btn.setId(i);
-            btn.setText(items.get(i));
-            btn.setTextSize(20);
-            btn.setBackgroundResource(R.drawable.rounded);
-            btn.setTypeface(Typeface.create("roboto", Typeface.NORMAL));
-            btn.setGravity(Gravity.START);
-            btn.setAllCaps(false);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT
-            );
-            params.setMargins(0, 0, 0, 40);
-            btn.setLayoutParams(params);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //Qui devi accedere alle informazioni della partita
-                    startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
-                }
-            });
-            lobbiesContainer.addView(btn);
+
+                //(String) this.items.getJSONObject(i).get("id")
+                btn.setId(i);
+                btn.setText((String) this.items.getJSONObject(i).get("name"));
+                btn.setTextSize(20);
+                btn.setBackgroundResource(R.drawable.rounded);
+                btn.setTypeface(Typeface.create("roboto", Typeface.NORMAL));
+                btn.setGravity(Gravity.START);
+                btn.setAllCaps(false);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT
+                );
+                params.setMargins(0, 0, 0, 40);
+                btn.setLayoutParams(params);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Qui devi accedere alle informazioni della partita
+                        startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
+                    }
+                });
+                lobbiesContainer.addView(btn);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

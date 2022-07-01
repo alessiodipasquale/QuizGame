@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity{
                         ioManager.getSocket().on(Socket.EVENT_CONNECT, (ok) -> {
                             startActivity(new Intent(MainActivity.this, ChooseRole.class));
                         });
+
                     } catch (Error e) {
                         // TODO Auto-generated catch block
                         Toast.makeText(getApplicationContext(), "Error while connecting to the socket", Toast.LENGTH_SHORT).show();
