@@ -28,6 +28,14 @@ public class MainActivity extends AppCompatActivity{
         instantiateButton();
     }
 
+    @Override
+    protected void onDestroy() {
+        SocketIoManager ioManager = new SocketIoManager();
+        ioManager.disconnect();
+        super.onDestroy();
+    }
+
+
 
     public void instantiateButton() {
         Button btn = (Button) findViewById(R.id.startPlay);

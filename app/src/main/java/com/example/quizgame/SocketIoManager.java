@@ -17,13 +17,17 @@ public class SocketIoManager {
                 this.socket.connect();
             } else {
                 if (!this.socket.connected()) {
-                    throw new Error();
+                    this.socket.connect();
                 }
             }
         } catch (URISyntaxException e) {
             e.printStackTrace();
             throw new Error();
         }
+    }
+
+    public void disconnect() {
+        this.socket.disconnect();
     }
 
     public Socket getSocket() {
