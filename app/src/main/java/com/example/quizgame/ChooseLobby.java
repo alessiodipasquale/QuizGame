@@ -25,9 +25,11 @@ import java.util.function.Function;
 import io.socket.client.Ack;
 
 public class ChooseLobby extends AppCompatActivity {
-    JSONArray items;
+    JSONArray items = new JSONArray();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_choose_lobby);
 
         SocketIoManager ioManager = new SocketIoManager();
         ioManager.getSocket().emit("getJoinableGames", null, args -> {
@@ -35,52 +37,98 @@ public class ChooseLobby extends AppCompatActivity {
             JSONArray response = (JSONArray) args[0];
 
             this.items = response;
+
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    LinearLayout lobbiesContainer = findViewById(R.id.lobbiesContainer);
+                    for (int i=0; i<items.length(); i++) {
+                        try {
+                            Button btn = new Button(ChooseLobby.this);
+
+                            //(String) this.items.getJSONObject(i).get("id")
+                            btn.setId(i);
+                            btn.setText((String) items.getJSONObject(i).get("name"));
+                            btn.setTextSize(20);
+                            btn.setBackgroundResource(R.drawable.rounded);
+                            btn.setTypeface(Typeface.create("roboto", Typeface.NORMAL));
+                            btn.setGravity(Gravity.START);
+                            btn.setAllCaps(false);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.MATCH_PARENT
+                            );
+                            params.setMargins(0, 0, 0, 40);
+                            btn.setLayoutParams(params);
+                            btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    //Qui devi accedere alle informazioni della partita
+                                    startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
+                                }
+                            });
+                            lobbiesContainer.addView(btn);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+
+                }
+            });
+
             //System.out.println(response.getJSONObject(0).get("name"));
         });
 
         ioManager.getSocket().on("newJoinableGame",  args -> {
 
-            JSONArray response = (JSONArray) args[0];
+            System.out.println(args);
 
-            System.out.println(response);
+            JSONObject response = (JSONObject) args[0];
+            items.put(response);
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    try {
+                        LinearLayout lobbiesContainer = findViewById(R.id.lobbiesContainer);
+                        Button btn = new Button(ChooseLobby.this);
+
+                        //(String) this.items.getJSONObject(i).get("id")
+                        btn.setId(items.length()+1);
+                        btn.setText((String) response.get("name"));
+
+                        btn.setTextSize(20);
+                        btn.setBackgroundResource(R.drawable.rounded);
+                        btn.setTypeface(Typeface.create("roboto", Typeface.NORMAL));
+                        btn.setGravity(Gravity.START);
+                        btn.setAllCaps(false);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT
+                        );
+                        params.setMargins(0, 0, 0, 40);
+                        btn.setLayoutParams(params);
+                        btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //Qui devi accedere alle informazioni della partita
+                                startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
+                            }
+                        });
+                        lobbiesContainer.addView(btn);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
             //System.out.println(response.getJSONObject(0).get("name"));
         });
 
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_lobby);
-
-        LinearLayout lobbiesContainer = findViewById(R.id.lobbiesContainer);
-        for (int i=0; i<items.length(); i++) {
-            try {
-            Button btn = new Button(this);
-
-                //(String) this.items.getJSONObject(i).get("id")
-                btn.setId(i);
-                btn.setText((String) this.items.getJSONObject(i).get("name"));
-                btn.setTextSize(20);
-                btn.setBackgroundResource(R.drawable.rounded);
-                btn.setTypeface(Typeface.create("roboto", Typeface.NORMAL));
-                btn.setGravity(Gravity.START);
-                btn.setAllCaps(false);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                );
-                params.setMargins(0, 0, 0, 40);
-                btn.setLayoutParams(params);
-                btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //Qui devi accedere alle informazioni della partita
-                        startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
-                    }
-                });
-                lobbiesContainer.addView(btn);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }
 
