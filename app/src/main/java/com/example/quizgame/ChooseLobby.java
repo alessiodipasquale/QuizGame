@@ -1,5 +1,7 @@
 package com.example.quizgame;
 
+import static java.util.Collections.singletonMap;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -64,8 +66,19 @@ public class ChooseLobby extends AppCompatActivity {
                             btn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    //Qui devi accedere alle informazioni della partita
-                                    startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
+                                    try {
+                                        for (int i = 0; i < items.length(); i++) {
+                                            JSONObject elem = (JSONObject) items.getJSONObject(i);
+                                            System.out.println(elem);
+                                            if (btn.getText().toString() == elem.get("name")) {
+                                                ioManager.getSocket().emit("joinGame", new JSONObject(singletonMap("id", elem.get("id"))), (Ack)args -> {
+                                                    startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
+                                                });
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             });
                             lobbiesContainer.addView(btn);
