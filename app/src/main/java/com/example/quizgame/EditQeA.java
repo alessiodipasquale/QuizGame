@@ -9,6 +9,7 @@ public class EditQeA extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_qea);
+        //Quale intendi?
+        //setContentView(R.layout.activity_edit_qea);
     }
 }
