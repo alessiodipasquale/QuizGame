@@ -17,10 +17,7 @@ public class SocketIoManager {
                 this.socket.connect();
             } else {
                 if (!this.socket.connected()) {
-                    this.socket = null;
-                    this.connect(ip);
-                } else {
-                    System.out.println("Already exists");
+                    throw new Error();
                 }
             }
         } catch (URISyntaxException e) {

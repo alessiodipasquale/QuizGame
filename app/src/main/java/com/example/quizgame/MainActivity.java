@@ -41,15 +41,16 @@ public class MainActivity extends AppCompatActivity{
                         EditText ipAddress = (EditText) findViewById(R.id.etIpAddress);
                         if (ioManager.getSocket()!= null && ioManager.getSocket().connected()) {
                             startActivity(new Intent(MainActivity.this, ChooseRole.class));
+                        } else {
+                            ioManager.connect(ipAddress.getText().toString());
+                            ioManager.getSocket().on(Socket.EVENT_CONNECT, (ok) -> {
+                                startActivity(new Intent(MainActivity.this, ChooseRole.class));
+                            });
                         }
-                        ioManager.connect(ipAddress.getText().toString());
-                        ioManager.getSocket().on(Socket.EVENT_CONNECT, (ok) -> {
-                            startActivity(new Intent(MainActivity.this, ChooseRole.class));
-                        });
 
                     } catch (Error e) {
                         // TODO Auto-generated catch block
-                        Toast.makeText(getApplicationContext(), "Error while connecting to the socket", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error while connecting to the socket", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "INTERNET NOT AVAILABLE", Toast.LENGTH_SHORT).show();
