@@ -1,6 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".EditQeA"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollY="@dimen/cardview_compat_inset_shadow"
+    android:background="@drawable/gradient_red">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.36">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="291dp"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/edQuestion"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:fontFamily="@font/roboto_bold"
+                android:hint="Write your question here"
+                android:textSize="22dp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/edAnswer1"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="16dp"
+                android:hint="First Answer"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toTopOf="@+id/edAnswer2"
+                app:layout_constraintEnd_toStartOf="@+id/rbAnswer1"
+                app:layout_constraintHorizontal_bias="0.2"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/edAnswer2"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Second Answer"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toTopOf="@+id/edAnswer3"
+                app:layout_constraintEnd_toStartOf="@+id/rbAnswer2"
+                app:layout_constraintHorizontal_bias="0.2"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/edAnswer3"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Third Answer"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toTopOf="@+id/edAnswer4"
+                app:layout_constraintEnd_toStartOf="@+id/rbAnswer3"
+                app:layout_constraintHorizontal_bias="0.2"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/edAnswer4"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:hint="Fourth Answer"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline6"
+                app:layout_constraintEnd_toStartOf="@+id/rbAnswer4"
+                app:layout_constraintHorizontal_bias="0.20"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <RadioButton
+                android:id="@+id/rbAnswer1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/edAnswer1"
+                app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
+            <RadioButton
+                android:id="@+id/rbAnswer2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/rbAnswer3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/edAnswer2"
+                app:layout_constraintTop_toBottomOf="@+id/rbAnswer1" />
+
+            <RadioButton
+                android:id="@+id/rbAnswer3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/rbAnswer4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/edAnswer3"
+                app:layout_constraintTop_toBottomOf="@+id/rbAnswer2" />
+
+            <RadioButton
+                android:id="@+id/rbAnswer4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="35dp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/edAnswer4" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="141dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="414dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btnFinish"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Finite"
+        android:textAllCaps="false"
+        android:textColor="@color/red"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Prossima"
+        android:textAllCaps="false"
+        android:textColor="@color/orange"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50208336" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
