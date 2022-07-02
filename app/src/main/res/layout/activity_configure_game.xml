@@ -19,16 +19,42 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.182"
+        app:layout_constraintHorizontal_bias="0.192"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.084" />
+        app:layout_constraintVertical_bias="0.025" />
+
+    <EditText
+        android:id="@+id/etNumberPlayers"
+        android:layout_width="307dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="104dp"
+        android:digits="0123456789."
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:text="4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <EditText
+        android:id="@+id/etGameName"
+        android:layout_width="307dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Gioco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="307dp"
         android:layout_height="23dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="@font/roboto"
         android:paddingStart="3dp"
         android:text="Inserisci il nome della partitia"
@@ -52,48 +78,62 @@
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etGameName"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <EditText
-        android:id="@+id/etGameName"
-        android:layout_width="307dp"
-        android:layout_height="48dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Gioco"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <EditText
-        android:id="@+id/etNumberPlayers"
-        android:layout_width="307dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="100dp"
-        android:ems="10"
-        android:digits="0123456789."
-        android:inputType="numberDecimal"
-        android:text="4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintVertical_bias="0.8" />
 
     <Button
-        android:id="@+id/btnAvanti"
-        android:layout_width="310dp"
+        android:id="@+id/btnNewQuestion"
+        android:layout_width="150dp"
         android:layout_height="54dp"
         android:background="@drawable/gradient_red"
         android:fontFamily="@font/roboto_bold"
-        android:text="Successivo"
+        android:text="Nuova domanda"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/guideline2" />
+
+    <Button
+        android:id="@+id/btnPlay"
+        android:layout_width="150dp"
+        android:layout_height="54dp"
+        android:background="@drawable/gradient_red"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Si gioca!"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvQuestionContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="30dp"
+        android:isScrollContainer="true"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etGameName"
-        app:layout_constraintVertical_bias="0.891" />
+        app:layout_constraintTop_toBottomOf="@+id/etNumberPlayers" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.91" />
 </androidx.constraintlayout.widget.ConstraintLayout>

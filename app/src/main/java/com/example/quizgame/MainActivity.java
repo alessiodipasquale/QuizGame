@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +20,6 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class MainActivity extends AppCompatActivity{
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity{
         super.onDestroy();
     }
 
-
-
     public void instantiateButton() {
         Button btn = (Button) findViewById(R.id.startPlay);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -50,12 +48,12 @@ public class MainActivity extends AppCompatActivity{
                         if (ioManager.getSocket()!= null && ioManager.getSocket().connected()) {
                             startActivity(new Intent(MainActivity.this, ChooseRole.class));
                         } else {
+                            String i= ipAddress.getText().toString();
                             ioManager.connect(ipAddress.getText().toString());
                             ioManager.getSocket().on(Socket.EVENT_CONNECT, (ok) -> {
                                 startActivity(new Intent(MainActivity.this, ChooseRole.class));
                             });
                         }
-
                     } catch (Error e) {
                         // TODO Auto-generated catch block
                         Toast.makeText(getApplicationContext(), "Errore nella connessione al server.", Toast.LENGTH_LONG).show();
@@ -67,9 +65,7 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-
     boolean isConnected(){
-
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
@@ -80,7 +76,5 @@ public class MainActivity extends AppCompatActivity{
                 return false;
         }else
             return false;
-
     }
-
 }
