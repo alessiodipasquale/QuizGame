@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity{
 
                     } catch (Error e) {
                         // TODO Auto-generated catch block
-                        Toast.makeText(getApplicationContext(), "Error while connecting to the socket", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Errore nella connessione al server.", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "INTERNET NOT AVAILABLE", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Internet non disponibile.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

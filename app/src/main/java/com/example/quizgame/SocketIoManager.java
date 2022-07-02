@@ -1,4 +1,6 @@
 package com.example.quizgame;
+import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.URISyntaxException;
 import java.util.function.Function;
 
@@ -9,11 +11,18 @@ import io.socket.emitter.Emitter;
 public class SocketIoManager {
     private static Socket socket = null;
 
+
+
     public void connect(String ip) {
+        IO.Options options = IO.Options.builder()
+                .setForceNew(false)
+                .setReconnection(false)
+                .build();
+
         try {
             if (this.socket == null) {
                 System.out.println(ip);
-                this.socket = IO.socket(ip);
+                this.socket = IO.socket(ip, options);
                 this.socket.connect();
             } else {
                 if (!this.socket.connected()) {
@@ -21,6 +30,9 @@ public class SocketIoManager {
                 }
             }
         } catch (URISyntaxException e) {
+            e.printStackTrace();
+            throw new Error();
+        } catch (Error e) {
             e.printStackTrace();
             throw new Error();
         }

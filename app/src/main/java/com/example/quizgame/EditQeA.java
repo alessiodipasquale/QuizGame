@@ -1,5 +1,7 @@
 package com.example.quizgame;
 
+import static java.util.Collections.singletonMap;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,7 +13,12 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import io.socket.client.Ack;
 
 public class EditQeA extends AppCompatActivity {
 
@@ -34,10 +41,22 @@ public class EditQeA extends AppCompatActivity {
     EditText correct = null;
     //#endregion
 
+    String id;
+    String name;
+    String numberOfPlayers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_question_card);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            this.id = extras.getString("id");
+            this.name = extras.getString("name");
+            //magari cambia string con int
+            this.numberOfPlayers = extras.getString("numberOfPlayers");
+        }
 
         this.api = new WebApiController();
 
@@ -83,13 +102,34 @@ public class EditQeA extends AppCompatActivity {
         });
         //#endregion
 
+
         //#region Initialize buttons
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                api.setQuestion(buildDataSourceItem(edQuestion.getText().toString(), edAnswer1.getText().toString(), edAnswer2.getText().toString(), edAnswer3.getText().toString(), edAnswer4.getText().toString(), correct.getText().toString()));
+               /*
+                if(correct != null && edQuestion.getText().toString() != "" && edAnswer1.getText().toString() != "" && edAnswer2.getText().toString() != "" && edAnswer3.getText().toString() != "" && edAnswer4.getText().toString() != "" && correct.getText().toString() != "")
+                    api.setQuestion(buildDataSourceItem(edQuestion.getText().toString(), edAnswer1.getText().toString(), edAnswer2.getText().toString(), edAnswer3.getText().toString(), edAnswer4.getText().toString(), correct.getText().toString()));
 
                 api.getAllQuestionsToString();
+                */
+
+                JSONObject item = new JSONObject();
+                try {
+                    item.put("id", id);
+                    item.put("name", name);
+                    item.put("numberOfPlayers", numberOfPlayers);
+
+                    //BASTA MODIFICARE QUI CON LE DOMANDE EFFETTIVE, IN FORMATO JSON
+                    item.put("questions", "[]");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                SocketIoManager ioManager = new SocketIoManager();
+                ioManager.getSocket().emit("configureGame", item, (Ack)args -> {
+                    startActivity(new Intent(EditQeA.this, WaitingRoom.class));
+                });
 
                 //chiama schermata di inizio gioco
             }

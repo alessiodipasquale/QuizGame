@@ -22,6 +22,7 @@
         <entry key="app/src/main/res/layout/activity_game_screen.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_loading_screen.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23988189697265627" />
+        <entry key="app/src/main/res/layout/activity_waiting_room.xml" value="0.20364583333333333" />
         <entry key="app/src/main/res/layout/edit_question_card.xml" value="0.47507019042968746" />
         <entry key="app/src/main/res/layout/question_card.xml" value="0.22" />
         <entry key="app/src/main/res/layout/round.xml" value="0.18072916666666666" />
