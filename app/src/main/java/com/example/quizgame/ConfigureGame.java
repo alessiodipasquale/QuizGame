@@ -11,22 +11,34 @@ import android.widget.EditText;
 
 public class ConfigureGame extends AppCompatActivity {
 
-    public EditText edGameName;
+    public EditText etGameName;
+    public EditText etNumberPlayers;
+
     public Button btnAvanti;
 
     public String gameName;
-
+    public String gameId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configure_game);
 
-        edGameName = findViewById(R.id.edGameName);
+        SocketIoManager ioManager = new SocketIoManager();
+        ioManager.getSocket().emit("createGame", null, args -> {
+           this.gameId = (String) args[0];
+        });
+
+        etGameName = findViewById(R.id.etGameName);
+        etNumberPlayers = findViewById(R.id.etNumberPlayers);
         btnAvanti = findViewById(R.id.btnAvanti);
         btnAvanti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ConfigureGame.this, EditQeA.class));
+                Intent i = new Intent(ConfigureGame.this, EditQeA.class);
+                i.putExtra("id", gameId);
+                i.putExtra("name",etGameName.getText().toString());
+                i.putExtra("numberOfPlayers",etNumberPlayers.getText().toString());
+                startActivity(i);
             }
         });
     }

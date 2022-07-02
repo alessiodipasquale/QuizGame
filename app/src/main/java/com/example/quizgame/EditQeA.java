@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -30,7 +31,7 @@ public class EditQeA extends AppCompatActivity {
 
     static WebApiController api;
 
-    EditText correct;
+    EditText correct = null;
     //#endregion
 
     @Override
@@ -99,12 +100,16 @@ public class EditQeA extends AppCompatActivity {
             public void onClick(View view) {
                 Log.wtf("2", "onClick: question is "+ edQuestion.getText().toString() );
 
-                api.setQuestion(buildDataSourceItem(edQuestion.getText().toString(), edAnswer1.getText().toString(), edAnswer2.getText().toString(), edAnswer3.getText().toString(), edAnswer4.getText().toString(), correct.getText().toString()));
+                if(correct == null) {
+                    Toast.makeText(getApplicationContext(), "Seleziona la risposta corretta", Toast.LENGTH_LONG).show();
+                } else {
+                    api.setQuestion(buildDataSourceItem(edQuestion.getText().toString(), edAnswer1.getText().toString(), edAnswer2.getText().toString(), edAnswer3.getText().toString(), edAnswer4.getText().toString(), correct.getText().toString()));
 
-                api.getAllQuestionsToString();
+                    api.getAllQuestionsToString();
 
-                //chiama prossima card vuota
-                startActivity(new Intent(EditQeA.this, EditQeA.class));
+                    //chiama prossima card vuota
+                    startActivity(new Intent(EditQeA.this, EditQeA.class));
+                }
             }
         });
 

@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/gradient_blue.xml" value="0.3545" />
         <entry key="app/src/main/res/drawable/gradient_red.xml" value="0.3305" />
+        <entry key="app/src/main/res/drawable/gradient_red_norounded.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/gradient_red_rb.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/round.xml" value="0.189" />
@@ -17,11 +18,11 @@
         <entry key="app/src/main/res/font/font.xml" value="0.3854166666666667" />
         <entry key="app/src/main/res/layout/activity_choose_lobby.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_choose_role.xml" value="0.35625" />
-        <entry key="app/src/main/res/layout/activity_configure_game.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_configure_game.xml" value="0.39616241455078116" />
         <entry key="app/src/main/res/layout/activity_game_screen.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_loading_screen.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23988189697265627" />
-        <entry key="app/src/main/res/layout/edit_question_card.xml" value="0.184375" />
+        <entry key="app/src/main/res/layout/edit_question_card.xml" value="0.47507019042968746" />
         <entry key="app/src/main/res/layout/question_card.xml" value="0.22" />
         <entry key="app/src/main/res/layout/round.xml" value="0.18072916666666666" />
       </map>
