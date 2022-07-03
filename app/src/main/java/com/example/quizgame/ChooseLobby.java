@@ -156,7 +156,7 @@ public class ChooseLobby extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(ChooseLobby.this);
-                                builder.setTitle("Title");
+                                builder.setTitle("Inserisci il tuo nome");
                                 final EditText input = new EditText(ChooseLobby.this);
 
                                 builder.setView(input);
