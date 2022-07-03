@@ -5,6 +5,8 @@ import static java.util.Collections.singletonMap;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
@@ -66,22 +69,47 @@ public class ChooseLobby extends AppCompatActivity {
                             btn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    try {
-                                        for (int i = 0; i < items.length(); i++) {
-                                            JSONObject elem = (JSONObject) items.getJSONObject(i);
-                                            System.out.println(elem);
-                                            if (btn.getText().toString() == elem.get("name")) {
-                                                ioManager.getSocket().emit("joinGame", new JSONObject(singletonMap("id", elem.get("id"))), (Ack)args -> {
-                                                    startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
-                                                });
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(ChooseLobby.this);
+                                    builder.setTitle("Inserisci il tuo nome");
+                                    final EditText input = new EditText(ChooseLobby.this);
+
+                                    builder.setView(input);
+
+                                    builder.setPositiveButton("Avanti", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String name = input.getText().toString();
+                                            try {
+                                                for (int i = 0; i < items.length(); i++) {
+                                                    JSONObject elem = (JSONObject) items.getJSONObject(i);
+                                                    System.out.println(elem);
+                                                    if (btn.getText().toString() == elem.get("name")) {
+                                                        JSONObject data = new JSONObject();
+                                                        data.put("id", elem.get("id"));
+                                                        data.put("name",name);
+                                                        ioManager.getSocket().emit("joinGame", data, (Ack)args -> {
+                                                            startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
+                                                        });
+                                                    }
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
                                             }
                                         }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                    });
+                                    builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                                    builder.show();
+
+
+
                                 }
-                            });
-                            lobbiesContainer.addView(btn);
+                            });                            lobbiesContainer.addView(btn);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -127,19 +155,45 @@ public class ChooseLobby extends AppCompatActivity {
                         btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                try {
-                                    for (int i = 0; i < items.length(); i++) {
-                                        JSONObject elem = (JSONObject) items.getJSONObject(i);
-                                        System.out.println(elem);
-                                        if (btn.getText().toString() == elem.get("name")) {
-                                            ioManager.getSocket().emit("joinGame", new JSONObject(singletonMap("id", elem.get("id"))), (Ack)args -> {
-                                                startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
-                                            });
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ChooseLobby.this);
+                                builder.setTitle("Title");
+                                final EditText input = new EditText(ChooseLobby.this);
+
+                                builder.setView(input);
+
+                                builder.setPositiveButton("Avanti", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String name = input.getText().toString();
+                                        try {
+                                            for (int i = 0; i < items.length(); i++) {
+                                                JSONObject elem = (JSONObject) items.getJSONObject(i);
+                                                System.out.println(elem);
+                                                if (btn.getText().toString() == elem.get("name")) {
+                                                    JSONObject data = new JSONObject();
+                                                    data.put("id", elem.get("id"));
+                                                    data.put("name",name);
+                                                    ioManager.getSocket().emit("joinGame", data, (Ack)args -> {
+                                                        startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
+                                                    });
+                                                }
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                });
+                                builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                builder.show();
+
+
+
                             }
                         });
                         lobbiesContainer.addView(btn);

@@ -91,6 +91,6 @@ public class WaitingRoom extends AppCompatActivity {
             });
 
         });
-        
+
     }
 }
