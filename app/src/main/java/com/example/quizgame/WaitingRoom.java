@@ -5,31 +5,42 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.socket.client.Ack;
 
 public class WaitingRoom extends AppCompatActivity {
     String id;
     String numberOfPlayers;
+    ListView listOfPlayers;
+    List list = new ArrayList();
+    ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_room);
 
+        listOfPlayers = (ListView) findViewById(R.id.listOfPlayers);
+        adapter = new ArrayAdapter(WaitingRoom.this, android.R.layout.simple_list_item_1, list);
+        listOfPlayers.setAdapter(adapter);
+
         Intent i = getIntent();
         id = i.getExtras().getString("id");
         numberOfPlayers = i.getExtras().getString("numberOfPlayers");
 
-        TextView players = findViewById(R.id.tvPlayers);
         Button btnStart = findViewById(R.id.btnStartGame);
 
-        players.setText("0 partecipanti su " + numberOfPlayers);
+        SocketIoManager ioManager = new SocketIoManager();
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,11 +53,44 @@ public class WaitingRoom extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                SocketIoManager ioManager = new SocketIoManager();
                 ioManager.getSocket().emit("startGame", item, (Ack) args -> {
                     startActivity(new Intent(WaitingRoom.this, GameScreenMaster.class));
                 });
+
             }
         });
+
+        ioManager.getSocket().on("joined", args -> {
+
+            System.out.println(args[0]);
+
+            String name = (String)args[0];
+
+            runOnUiThread(new Runnable() {
+                  @Override
+                  public void run() {
+                      list.add(name);
+                      adapter.notifyDataSetChanged();
+                  }
+            });
+
+        });
+
+        ioManager.getSocket().on("playerQuitted", args -> {
+
+            System.out.println(args[0]);
+
+            String name = (String)args[0];
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    list.remove(name);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+        });
+        
     }
 }

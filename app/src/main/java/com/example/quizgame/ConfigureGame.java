@@ -111,10 +111,10 @@ public class ConfigureGame extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                SocketIoManager ioManager = new SocketIoManager();
+
                 ioManager.getSocket().emit("configureGame", item, (Ack) args -> {
                     Intent i = new Intent(ConfigureGame.this, WaitingRoom.class);
-                    i.putExtra("idGame", gameId);
+                    i.putExtra("id", gameId);
                     i.putExtra("numberOfPlayers", numberOfPlayers);
                     startActivity(i);
                 });
