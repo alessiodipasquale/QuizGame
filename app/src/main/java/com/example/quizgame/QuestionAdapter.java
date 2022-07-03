@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
@@ -21,6 +22,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
     public QuestionAdapter(ArrayList<DataSourceItem> items, Context context){
         this.questions = items;
         this.context = context;
+    }
+
+    public ArrayList<DataSourceItem> getQuestions() {
+        return questions;
     }
 
     @NonNull
@@ -41,16 +46,16 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
 
     public void addQuestion(DataSourceItem q){
         this.questions.add(q);
-        this.notifyItemInserted(this.getItemCount() + 1);
+        notifyDataSetChanged();;
     }
 
     public static class QuestionHolder extends RecyclerView.ViewHolder {
 
         TextView question;
-        CheckedTextView answer1;
-        CheckedTextView answer2;
-        CheckedTextView answer3;
-        CheckedTextView answer4;
+        CheckBox answer1;
+        CheckBox answer2;
+        CheckBox answer3;
+        CheckBox answer4;
 
         public QuestionHolder(@NonNull View itemView) {
             super(itemView);

@@ -19,7 +19,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import io.socket.client.Ack;
 
 public class ConfigureGame extends AppCompatActivity {
 
@@ -33,7 +40,6 @@ public class ConfigureGame extends AppCompatActivity {
     public String gameName;
     public String gameId;
     public String numberOfPlayers;
-    public ArrayList<DataSourceItem> questions;
     public QuestionAdapter questionAdapter;
 
     @Override
@@ -72,10 +78,7 @@ public class ConfigureGame extends AppCompatActivity {
                             answers.add(new DataSourceItem.Answer(a4, a4.compareTo(correctAnswer) == 0));
 
                             DataSourceItem d = new DataSourceItem(question, answers);
-                            //questions.add(d);
                             questionAdapter.addQuestion(d);
-
-                            Log.wtf("2", "onActivityResult: " + question + a1 + a2 + a3 + a4);
                         }
                     }
                 });
@@ -94,32 +97,59 @@ public class ConfigureGame extends AppCompatActivity {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //da implementare
+                gameName = etGameName.getText().toString();
+                numberOfPlayers = etNumberPlayers.getText().toString();
+
+                JSONObject item = new JSONObject();
+                try {
+                    item.put("id", gameId);
+                    item.put("name", gameName);
+                    item.put("numberOfPlayers", numberOfPlayers);
+                    item.put("questions", prepareQuestionForServer(questionAdapter.getQuestions()));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                SocketIoManager ioManager = new SocketIoManager();
+                ioManager.getSocket().emit("configureGame", item, (Ack) args -> {
+                    Intent i = new Intent(ConfigureGame.this, WaitingRoom.class);
+                    i.putExtra("idGame", gameId);
+                    i.putExtra("numberOfPlayers", numberOfPlayers);
+                    startActivity(i);
+                });
             }
         });
 
         btnNewQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
-                Intent i = new Intent(ConfigureGame.this, EditQeA.class);
-
-                i.putExtra("id", gameId);
-                i.putExtra("name",etGameName.getText().toString());
-                i.putExtra("numberOfPlayers",etNumberPlayers.getText().toString());
-
-                startActivity(i);
-                */
-
                 activityResultLauncher.launch(new Intent(context, EditQeA.class));
             }
         });
 
         rvQuestions.setLayoutManager(new LinearLayoutManager(this));
-        questions = new ArrayList<DataSourceItem>();
-        questionAdapter = new QuestionAdapter( questions, ConfigureGame.this);
+        questionAdapter = new QuestionAdapter( new ArrayList<DataSourceItem>(), ConfigureGame.this);
         rvQuestions.setAdapter(questionAdapter);
     }
 
+    public JSONArray prepareQuestionForServer(ArrayList<DataSourceItem> questions) {
+        JSONArray allQuestionsInJsonArray = new JSONArray();
+
+        for (DataSourceItem question : questions) {
+
+            JSONArray q = new JSONArray();
+            q.put(question.getQuestion());
+
+            for (DataSourceItem.Answer answer : question.getAnswer()) {
+                JSONArray a = new JSONArray();
+                a.put(answer.text);
+                a.put(answer.isCorrect);
+                q.put(a);
+            }
+            allQuestionsInJsonArray.put(q);
+        }
+        return allQuestionsInJsonArray;
+    }
 
 }

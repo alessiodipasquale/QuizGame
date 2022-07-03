@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_red_norounded"
-    android:scrollY="@dimen/cardview_compat_inset_shadow"
     tools:context=".EditQeA">
 
     <androidx.cardview.widget.CardView
@@ -42,7 +41,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="16dp"
                 android:hint="Prima risposta"
                 android:minHeight="48dp"
                 android:textSize="18sp"
@@ -58,7 +56,6 @@
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginBottom="16dp"
                 android:hint="Seconda risposta"
                 android:minHeight="48dp"
                 android:textSize="18sp"
@@ -72,7 +69,6 @@
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginBottom="16dp"
                 android:hint="Terza risposta"
                 android:minHeight="48dp"
                 android:textSize="18sp"
@@ -96,21 +92,19 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
 
-
-
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="141dp" />
+                app:layout_constraintGuide_begin="154dp" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="414dp" />
+                app:layout_constraintGuide_begin="390dp" />
 
 
             <RadioGroup
@@ -127,7 +121,7 @@
                 <RadioButton
                     android:id="@+id/rbAnswer1"
                     android:layout_width="wrap_content"
-                    android:layout_height="57dp"
+                    android:layout_height="wrap_content"
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     app:layout_constraintBottom_toBottomOf="@+id/edAnswer1"
@@ -135,19 +129,19 @@
                     app:layout_constraintTop_toTopOf="@+id/edAnswer1" />
 
                 <RadioButton
-                    android:id="@+id/rbAnswer4"
+                    android:id="@+id/rbAnswer2"
                     android:layout_width="wrap_content"
-                    android:layout_height="63dp"
+                    android:layout_height="wrap_content"
                     android:minWidth="48dp"
                     android:minHeight="48dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/edAnswer4"
+                    app:layout_constraintBottom_toBottomOf="@+id/edAnswer2"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/edAnswer4" />
+                    app:layout_constraintTop_toTopOf="@+id/edAnswer2" />
 
                 <RadioButton
                     android:id="@+id/rbAnswer3"
                     android:layout_width="wrap_content"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:minWidth="48dp"
                     android:minHeight="48dp"
                     app:layout_constraintBottom_toBottomOf="@+id/edAnswer3"
@@ -155,14 +149,14 @@
                     app:layout_constraintTop_toTopOf="@+id/edAnswer3" />
 
                 <RadioButton
-                    android:id="@+id/rbAnswer2"
+                    android:id="@+id/rbAnswer4"
                     android:layout_width="wrap_content"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:minWidth="48dp"
                     android:minHeight="48dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/edAnswer2"
+                    app:layout_constraintBottom_toBottomOf="@+id/edAnswer4"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/edAnswer2" />
+                    app:layout_constraintTop_toTopOf="@+id/edAnswer4" />
 
             </RadioGroup>
 

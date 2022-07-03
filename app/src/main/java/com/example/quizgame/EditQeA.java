@@ -158,28 +158,32 @@ public class EditQeA extends AppCompatActivity {
         btnNextQ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(correct == null) {
+                    Toast.makeText(getApplicationContext(), "Seleziona la risposta corretta", Toast.LENGTH_LONG).show();
+                } else {
 
-                Intent i = new Intent();
-                i.putExtra("question", edQuestion.getText().toString());
-                Log.wtf("2", "question: " + edQuestion.getText().toString());
+                    Intent i = new Intent();
+                    i.putExtra("question", edQuestion.getText().toString());
+                    Log.wtf("2", "question: " + edQuestion.getText().toString());
 
-                i.putExtra("answer1", edAnswer1.getText().toString());
-                Log.wtf("2", "| " + edAnswer1.getText().toString());
+                    i.putExtra("answer1", edAnswer1.getText().toString());
+                    Log.wtf("2", "| " + edAnswer1.getText().toString());
 
-                i.putExtra("answer2", edAnswer2.getText().toString());
-                Log.wtf("2", "| " + edAnswer2.getText().toString());
+                    i.putExtra("answer2", edAnswer2.getText().toString());
+                    Log.wtf("2", "| " + edAnswer2.getText().toString());
 
-                i.putExtra("answer3", edAnswer3.getText().toString());
-                Log.wtf("2", "| " + edAnswer3.getText().toString());
+                    i.putExtra("answer3", edAnswer3.getText().toString());
+                    Log.wtf("2", "| " + edAnswer3.getText().toString());
 
-                i.putExtra("answer4", edAnswer4.getText().toString());
-                Log.wtf("2", "| " + edAnswer4.getText().toString());
+                    i.putExtra("answer4", edAnswer4.getText().toString());
+                    Log.wtf("2", "| " + edAnswer4.getText().toString());
 
-                i.putExtra("correct", correct.getText().toString());
-                Log.wtf("2", "| " + correct.getText().toString());
+                    i.putExtra("correct", correct.getText().toString());
+                    Log.wtf("2", "| " + correct.getText().toString());
 
-                setResult(1, i);
-                finish();
+                    setResult(1, i);
+                    finish();
+                }
             }
         });
         //#endregion

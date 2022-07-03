@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".GameScreenMaster"
+            android:exported="false" />
+        <activity
             android:name=".WaitingRoom"
             android:exported="false" />
         <activity
