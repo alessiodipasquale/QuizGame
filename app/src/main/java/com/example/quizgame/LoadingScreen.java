@@ -22,8 +22,22 @@ public class LoadingScreen extends AppCompatActivity {
 
         ioManager.getSocket().on("startGame", args -> {
             Intent i = new Intent(LoadingScreen.this, GameScreen.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
             startActivity(i);
+        });
+
+        ioManager.getSocket().on("question", args -> {
+            JSONObject response = (JSONObject) args[0];
+
+            Intent i = new Intent(LoadingScreen.this, GameScreen.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.putExtra("question",response.toString());
+            startActivity(i);
+        });
+
+            ioManager.getSocket().on("startTimer", args -> {
+                    System.out.println("startedTimer");
         });
 
         ioManager.getSocket().on("gameStoppedByAdmin", args -> {

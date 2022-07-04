@@ -42,19 +42,19 @@ public class GameScreen extends AppCompatActivity {
             timer.start();
         });
 
-        ioManager.getSocket().on("question", args -> {
-            JSONObject response = (JSONObject) args[0];
+        if(getIntent().hasExtra("question")) {
             try {
+                JSONObject response = new JSONObject(getIntent().getStringExtra("question"));
                 questionTv.setText(response.get("question").toString());
                 answer1.setText(response.get("answer1").toString());
                 answer2.setText(response.get("answer2").toString());
                 answer3.setText(response.get("answer3").toString());
                 answer4.setText(response.get("answer4").toString());
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        });
+        }
+
 
 
 
