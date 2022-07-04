@@ -13,9 +13,12 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
 
 import org.json.JSONArray;
@@ -36,6 +39,14 @@ public class ChooseLobby extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_lobby);
 
+        ListView listOfGames;
+        List list = new ArrayList();
+        ArrayAdapter adapter;
+
+        listOfGames = (ListView) findViewById(R.id.listOfGames);
+        adapter = new ArrayAdapter(ChooseLobby.this, android.R.layout.simple_list_item_1, list);
+        listOfGames.setAdapter(adapter);
+
         SocketIoManager ioManager = new SocketIoManager();
         ioManager.getSocket().emit("getJoinableGames", null, args -> {
 
@@ -47,28 +58,12 @@ public class ChooseLobby extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                    LinearLayout lobbiesContainer = findViewById(R.id.lobbiesContainer);
                     for (int i=0; i<items.length(); i++) {
                         try {
-                            Button btn = new Button(ChooseLobby.this);
-
-                            //(String) this.items.getJSONObject(i).get("id")
-                            btn.setId(i);
-                            btn.setText((String) items.getJSONObject(i).get("name"));
-                            btn.setTextSize(20);
-                            btn.setBackgroundResource(R.drawable.rounded);
-                            btn.setTypeface(Typeface.create("roboto", Typeface.NORMAL));
-                            btn.setGravity(Gravity.START);
-                            btn.setAllCaps(false);
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT,
-                                    LinearLayout.LayoutParams.MATCH_PARENT
-                            );
-                            params.setMargins(0, 0, 0, 40);
-                            btn.setLayoutParams(params);
-                            btn.setOnClickListener(new View.OnClickListener() {
+                            list.add(items.getJSONObject(i).get("name"));
+                            listOfGames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
-                                public void onClick(View view) {
+                                public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(ChooseLobby.this);
                                     builder.setTitle("Inserisci il tuo nome");
                                     final EditText input = new EditText(ChooseLobby.this);
@@ -82,8 +77,13 @@ public class ChooseLobby extends AppCompatActivity {
                                             try {
                                                 for (int i = 0; i < items.length(); i++) {
                                                     JSONObject elem = (JSONObject) items.getJSONObject(i);
-                                                    System.out.println(elem);
-                                                    if (btn.getText().toString() == elem.get("name")) {
+
+                                                    String listElem = list.get(index).toString();
+                                                    String elemName = elem.get("name").toString();
+
+                                                    if ( listElem.compareTo(elemName) == 0) {
+                                                        System.out.println(elem);
+                                                        System.out.println(list.get(i));
                                                         JSONObject data = new JSONObject();
                                                         data.put("id", elem.get("id"));
                                                         data.put("name",name);
@@ -106,10 +106,10 @@ public class ChooseLobby extends AppCompatActivity {
 
                                     builder.show();
 
-
-
                                 }
-                            });                            lobbiesContainer.addView(btn);
+                            });
+                            adapter.notifyDataSetChanged();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -124,82 +124,25 @@ public class ChooseLobby extends AppCompatActivity {
 
         ioManager.getSocket().on("newJoinableGame",  args -> {
 
-            System.out.println(args);
 
             JSONObject response = (JSONObject) args[0];
+            System.out.println(response);
+
             items.put(response);
             runOnUiThread(new Runnable() {
 
                 @Override
                 public void run() {
 
-                    try {
-                        LinearLayout lobbiesContainer = findViewById(R.id.lobbiesContainer);
-                        Button btn = new Button(ChooseLobby.this);
+                        try {
+                            list.add(response.get("name"));
+                            adapter.notifyDataSetChanged();
 
-                        //(String) this.items.getJSONObject(i).get("id")
-                        btn.setId(items.length()+1);
-                        btn.setText((String) response.get("name"));
-
-                        btn.setTextSize(20);
-                        btn.setBackgroundResource(R.drawable.rounded);
-                        btn.setTypeface(Typeface.create("roboto", Typeface.NORMAL));
-                        btn.setGravity(Gravity.START);
-                        btn.setAllCaps(false);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.MATCH_PARENT
-                        );
-                        params.setMargins(0, 0, 0, 40);
-                        btn.setLayoutParams(params);
-                        btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(ChooseLobby.this);
-                                builder.setTitle("Inserisci il tuo nome");
-                                final EditText input = new EditText(ChooseLobby.this);
-
-                                builder.setView(input);
-
-                                builder.setPositiveButton("Avanti", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        String name = input.getText().toString();
-                                        try {
-                                            for (int i = 0; i < items.length(); i++) {
-                                                JSONObject elem = (JSONObject) items.getJSONObject(i);
-                                                System.out.println(elem);
-                                                if (btn.getText().toString() == elem.get("name")) {
-                                                    JSONObject data = new JSONObject();
-                                                    data.put("id", elem.get("id"));
-                                                    data.put("name",name);
-                                                    ioManager.getSocket().emit("joinGame", data, (Ack)args -> {
-                                                        startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
-                                                    });
-                                                }
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-                                builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                                builder.show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
 
-
-                            }
-                        });
-                        lobbiesContainer.addView(btn);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
                 }
             });
@@ -207,6 +150,22 @@ public class ChooseLobby extends AppCompatActivity {
             //System.out.println(response.getJSONObject(0).get("name"));
         });
 
+
+        ioManager.getSocket().on("gameNowPlaying", args -> {
+            String name = (String) args[0];
+
+            System.out.println(name);
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    int index = list.indexOf(name);
+                    list.remove(index);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+        });
     }
 }
 

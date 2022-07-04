@@ -71,7 +71,6 @@ public class EditQeA extends AppCompatActivity {
         edAnswer4 = findViewById(R.id.edAnswer4);
         rbAnswer4 = findViewById(R.id.rbAnswer4);
 
-        btnFinish = findViewById(R.id.btnFinish);
         btnNextQ = findViewById(R.id.btnNext);
         //#endregion
 
@@ -104,36 +103,6 @@ public class EditQeA extends AppCompatActivity {
 
 
         //#region Initialize buttons
-        btnFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               /*
-                if(correct != null && edQuestion.getText().toString() != "" && edAnswer1.getText().toString() != "" && edAnswer2.getText().toString() != "" && edAnswer3.getText().toString() != "" && edAnswer4.getText().toString() != "" && correct.getText().toString() != "")
-                    api.setQuestion(buildDataSourceItem(edQuestion.getText().toString(), edAnswer1.getText().toString(), edAnswer2.getText().toString(), edAnswer3.getText().toString(), edAnswer4.getText().toString(), correct.getText().toString()));
-
-                api.getAllQuestionsToString();
-                */
-
-                JSONObject item = new JSONObject();
-                try {
-                    item.put("id", id);
-                    item.put("name", name);
-                    item.put("numberOfPlayers", numberOfPlayers);
-
-                    //BASTA MODIFICARE QUI CON LE DOMANDE EFFETTIVE, IN FORMATO JSON
-                    item.put("questions", "[]");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                SocketIoManager ioManager = new SocketIoManager();
-                ioManager.getSocket().emit("configureGame", item, (Ack)args -> {
-                    startActivity(new Intent(EditQeA.this, WaitingRoom.class));
-                });
-
-                //chiama schermata di inizio gioco
-            }
-        });
 /*
         btnNextQ.setOnClickListener(new View.OnClickListener() {
             @Override

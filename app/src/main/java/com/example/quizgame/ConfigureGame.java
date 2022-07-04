@@ -138,16 +138,22 @@ public class ConfigureGame extends AppCompatActivity {
 
         for (DataSourceItem question : questions) {
 
-            JSONArray q = new JSONArray();
-            q.put(question.getQuestion());
-
-            for (DataSourceItem.Answer answer : question.getAnswer()) {
-                JSONArray a = new JSONArray();
-                a.put(answer.text);
-                a.put(answer.isCorrect);
-                q.put(a);
+            JSONObject q = new JSONObject();
+            try {
+                q.put("question",question.getQuestion());
+                Integer i = 1;
+                for (DataSourceItem.Answer answer : question.getAnswer()) {
+                    q.put("answer".concat(i.toString()),answer.text);
+                    if(answer.isCorrect)
+                        q.put("correctIndex",i);
+                    i = i+1;
+                }
+                allQuestionsInJsonArray.put(q);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            allQuestionsInJsonArray.put(q);
+
+
         }
         return allQuestionsInJsonArray;
     }

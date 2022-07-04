@@ -174,25 +174,6 @@
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:id="@+id/btnFinish"
-        android:layout_width="130dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rounded"
-        android:fontFamily="@font/roboto_bold"
-        android:text="Avvia gioco"
-        android:textAllCaps="false"
-        android:textColor="@color/red"
-        android:textSize="20sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline7"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
         android:id="@+id/btnNext"
         android:layout_width="130dp"
         android:layout_height="60dp"
