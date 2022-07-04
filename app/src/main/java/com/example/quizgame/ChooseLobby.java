@@ -42,12 +42,60 @@ public class ChooseLobby extends AppCompatActivity {
         ListView listOfGames;
         List list = new ArrayList();
         ArrayAdapter adapter;
-
+        SocketIoManager ioManager = new SocketIoManager();
         listOfGames = (ListView) findViewById(R.id.listOfGames);
         adapter = new ArrayAdapter(ChooseLobby.this, android.R.layout.simple_list_item_1, list);
         listOfGames.setAdapter(adapter);
 
-        SocketIoManager ioManager = new SocketIoManager();
+        listOfGames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChooseLobby.this);
+                builder.setTitle("Inserisci il tuo nome");
+                final EditText input = new EditText(ChooseLobby.this);
+
+                builder.setView(input);
+
+                builder.setPositiveButton("Avanti", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String name = input.getText().toString();
+                        try {
+                            for (int i = 0; i < items.length(); i++) {
+                                JSONObject elem = (JSONObject) items.getJSONObject(i);
+
+                                String listElem = list.get(index).toString();
+                                String elemName = elem.get("name").toString();
+
+                                if ( listElem.compareTo(elemName) == 0) {
+                                    System.out.println(elem);
+                                    System.out.println(list.get(i));
+                                    JSONObject data = new JSONObject();
+                                    data.put("id", elem.get("id"));
+                                    data.put("name",name);
+                                    ioManager.getSocket().emit("joinGame", data, (Ack)args -> {
+                                        startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
+                                    });
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
+            }
+        });
+
+
         ioManager.getSocket().emit("getJoinableGames", null, args -> {
 
             JSONArray response = (JSONArray) args[0];
@@ -62,53 +110,6 @@ public class ChooseLobby extends AppCompatActivity {
                         try {
                             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                             list.add(items.getJSONObject(i).get("name"));
-                            listOfGames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(ChooseLobby.this);
-                                    builder.setTitle("Inserisci il tuo nome");
-                                    final EditText input = new EditText(ChooseLobby.this);
-
-                                    builder.setView(input);
-
-                                    builder.setPositiveButton("Avanti", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            String name = input.getText().toString();
-                                            try {
-                                                for (int i = 0; i < items.length(); i++) {
-                                                    JSONObject elem = (JSONObject) items.getJSONObject(i);
-
-                                                    String listElem = list.get(index).toString();
-                                                    String elemName = elem.get("name").toString();
-
-                                                    if ( listElem.compareTo(elemName) == 0) {
-                                                        System.out.println(elem);
-                                                        System.out.println(list.get(i));
-                                                        JSONObject data = new JSONObject();
-                                                        data.put("id", elem.get("id"));
-                                                        data.put("name",name);
-                                                        ioManager.getSocket().emit("joinGame", data, (Ack)args -> {
-                                                            startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
-                                                        });
-                                                    }
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
-                                    builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.cancel();
-                                        }
-                                    });
-
-                                    builder.show();
-
-                                }
-                            });
                             adapter.notifyDataSetChanged();
 
                         } catch (JSONException e) {
