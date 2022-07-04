@@ -26,18 +26,20 @@ public class GameScreen extends AppCompatActivity {
 
         timerTv= (TextView) findViewById(R.id.timer);
 
+        CountDownTimer timer = new CountDownTimer(10000, 1000){
+            public void onTick(long millisUntilFinished){
+                System.out.println(String.valueOf(millisUntilFinished / 1000));
+                timerTv.setText(String.valueOf(millisUntilFinished / 1000));
+            }
+            public  void onFinish(){
+                //Da capire
+            }
+        };
+
         SocketIoManager ioManager = new SocketIoManager();
         ioManager.getSocket().on("startTimer", args -> {
             System.out.println("startedTimer");
-            new CountDownTimer(10000, 1000){
-                public void onTick(long millisUntilFinished){
-                    timerTv.setText(String.valueOf(counter));
-                    counter++;
-                }
-                public  void onFinish(){
-                    //Da capire
-                }
-            }.start();
+            timer.start();
         });
 
         ioManager.getSocket().on("question", args -> {

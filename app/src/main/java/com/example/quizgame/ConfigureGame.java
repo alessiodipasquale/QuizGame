@@ -84,9 +84,12 @@ public class ConfigureGame extends AppCompatActivity {
                 });
 
         SocketIoManager ioManager = new SocketIoManager();
-        ioManager.getSocket().emit("createGame", null, args -> {
-           this.gameId = (String) args[0];
-        });
+        if(ioManager.getSocket().connected())
+            ioManager.getSocket().emit("createGame", null, args -> {
+                this.gameId = (String) args[0];
+            });
+        else
+            ioManager.goToHome(ConfigureGame.this);
 
         etGameName = findViewById(R.id.etGameName);
         etNumberPlayers = findViewById(R.id.etNumberPlayers);
@@ -111,13 +114,15 @@ public class ConfigureGame extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
-                ioManager.getSocket().emit("configureGame", item, (Ack) args -> {
-                    Intent i = new Intent(ConfigureGame.this, WaitingRoom.class);
-                    i.putExtra("id", gameId);
-                    i.putExtra("numberOfPlayers", numberOfPlayers);
-                    startActivity(i);
-                });
+                if(ioManager.getSocket().connected())
+                    ioManager.getSocket().emit("configureGame", item, (Ack) args -> {
+                        Intent i = new Intent(ConfigureGame.this, WaitingRoom.class);
+                        i.putExtra("id", gameId);
+                        i.putExtra("numberOfPlayers", numberOfPlayers);
+                        startActivity(i);
+                    });
+                else
+                    ioManager.goToHome(ConfigureGame.this);
             }
         });
 

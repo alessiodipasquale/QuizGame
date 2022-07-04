@@ -95,8 +95,8 @@ public class ChooseLobby extends AppCompatActivity {
             }
         });
 
-
-        ioManager.getSocket().emit("getJoinableGames", null, args -> {
+        if(ioManager.getSocket().connected())
+         ioManager.getSocket().emit("getJoinableGames", null, args -> {
 
             JSONArray response = (JSONArray) args[0];
 
@@ -106,7 +106,7 @@ public class ChooseLobby extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                    for (int i=0; i<items.length(); i++) {
+                    for (int i = 0; i < items.length(); i++) {
                         try {
                             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                             list.add(items.getJSONObject(i).get("name"));
@@ -121,8 +121,11 @@ public class ChooseLobby extends AppCompatActivity {
                 }
             });
 
-            //System.out.println(response.getJSONObject(0).get("name"));
-        });
+                //System.out.println(response.getJSONObject(0).get("name"));
+            });
+        else
+            ioManager.goToHome(ChooseLobby.this);
+
 
         ioManager.getSocket().on("newJoinableGame",  args -> {
 

@@ -53,9 +53,12 @@ public class WaitingRoom extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                ioManager.getSocket().emit("startGame", item, (Ack) args -> {
-                    startActivity(new Intent(WaitingRoom.this, GameScreenMaster.class));
-                });
+                if(ioManager.getSocket().connected())
+                    ioManager.getSocket().emit("startGame", item, (Ack) args -> {
+                        startActivity(new Intent(WaitingRoom.this, GameScreenMaster.class));
+                    });
+                else
+                    ioManager.goToHome(WaitingRoom.this);
 
             }
         });
