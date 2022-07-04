@@ -2,8 +2,10 @@ package com.example.quizgame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -13,7 +15,7 @@ import org.json.JSONObject;
 public class GameScreen extends AppCompatActivity {
     public int counter;
     TextView timerTv;
-
+    int reponseIndex;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,13 +38,13 @@ public class GameScreen extends AppCompatActivity {
             }
         };
 
+        timer.start();
+
         SocketIoManager ioManager = new SocketIoManager();
-        ioManager.getSocket().on("startTimer", args -> {
-            System.out.println("startedTimer");
-            timer.start();
-        });
+
 
         if(getIntent().hasExtra("question")) {
+            System.out.println("QUESTION DA GAMESCREEN");
             try {
                 JSONObject response = new JSONObject(getIntent().getStringExtra("question"));
                 questionTv.setText(response.get("question").toString());
@@ -54,6 +56,55 @@ public class GameScreen extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
+
+        answer1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reponseIndex = 1;
+                answer1.setEnabled(false);
+                answer2.setEnabled(false);
+                answer3.setEnabled(false);
+                answer4.setEnabled(false);
+                answer1.setBackgroundResource(R.drawable.yellow_border);
+            }
+        });
+
+        answer2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reponseIndex = 1;
+                answer1.setEnabled(false);
+                answer2.setEnabled(false);
+                answer3.setEnabled(false);
+                answer4.setEnabled(false);
+                answer2.setBackgroundResource(R.drawable.yellow_border);
+            }
+        });
+
+        answer3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reponseIndex = 1;
+                answer1.setEnabled(false);
+                answer2.setEnabled(false);
+                answer3.setEnabled(false);
+                answer4.setEnabled(false);
+                answer3.setBackgroundResource(R.drawable.yellow_border);
+            }
+        });
+
+        answer4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reponseIndex = 1;
+                answer1.setEnabled(false);
+                answer2.setEnabled(false);
+                answer3.setEnabled(false);
+                answer4.setEnabled(false);
+                answer4.setBackgroundResource(R.drawable.yellow_border);
+            }
+        });
 
 
 

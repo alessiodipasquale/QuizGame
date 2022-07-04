@@ -20,6 +20,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/round.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/rounded.xml" value="0.189" />
+        <entry key="app/src/main/res/drawable/yellow_border.xml" value="0.21" />
         <entry key="app/src/main/res/font/font.xml" value="0.3854166666666667" />
         <entry key="app/src/main/res/layout/activity_choose_lobby.xml" value="0.2216888427734376" />
         <entry key="app/src/main/res/layout/activity_choose_role.xml" value="0.35625" />

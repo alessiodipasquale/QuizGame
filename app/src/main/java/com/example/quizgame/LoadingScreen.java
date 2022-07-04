@@ -21,26 +21,18 @@ public class LoadingScreen extends AppCompatActivity {
         SocketIoManager ioManager = new SocketIoManager();
 
         ioManager.getSocket().on("startGame", args -> {
-            Intent i = new Intent(LoadingScreen.this, GameScreen.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-            startActivity(i);
         });
 
         ioManager.getSocket().on("question", args -> {
-            JSONObject response = (JSONObject) args[0];
-
+            System.out.println("QUESTION");
             Intent i = new Intent(LoadingScreen.this, GameScreen.class);
             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.putExtra("question",response.toString());
+            i.putExtra("question",args[0].toString());
             startActivity(i);
         });
 
-            ioManager.getSocket().on("startTimer", args -> {
-                    System.out.println("startedTimer");
-        });
-
-        ioManager.getSocket().on("gameStoppedByAdmin", args -> {
+            ioManager.getSocket().on("gameStoppedByAdmin", args -> {
             runOnUiThread(new Runnable() {
                 public void run() {
                     Toast.makeText(getApplicationContext(), "Partita interrotta dall'Admin.", Toast.LENGTH_LONG).show();
