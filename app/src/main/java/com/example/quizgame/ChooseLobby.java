@@ -60,6 +60,7 @@ public class ChooseLobby extends AppCompatActivity {
                 public void run() {
                     for (int i=0; i<items.length(); i++) {
                         try {
+                            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                             list.add(items.getJSONObject(i).get("name"));
                             listOfGames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
@@ -135,6 +136,7 @@ public class ChooseLobby extends AppCompatActivity {
                 public void run() {
 
                         try {
+                            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                             list.add(response.get("name"));
                             adapter.notifyDataSetChanged();
 
@@ -162,6 +164,10 @@ public class ChooseLobby extends AppCompatActivity {
                     int index = list.indexOf(name);
                     list.remove(index);
                     adapter.notifyDataSetChanged();
+
+                    if(list.size() == 0)
+                        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+
                 }
             });
 
