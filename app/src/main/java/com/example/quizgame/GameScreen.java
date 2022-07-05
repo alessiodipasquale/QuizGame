@@ -22,7 +22,7 @@ public class GameScreen extends AppCompatActivity {
     String id;
     String actualQuestion;
     Button selectedButton;
-    int responseIndex;
+    int responseIndex = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -73,8 +73,10 @@ public class GameScreen extends AppCompatActivity {
                             selectedButton.setEnabled(true);
                             selectedButton.setBackgroundResource(R.drawable.green_border);
                         } else {
-                            selectedButton.setEnabled(true);
-                            selectedButton.setBackgroundResource(R.drawable.red_border);
+                            if (responseIndex != 0) {
+                                selectedButton.setEnabled(true);
+                                selectedButton.setBackgroundResource(R.drawable.red_border);
+                            }
                         }
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
@@ -83,7 +85,7 @@ public class GameScreen extends AppCompatActivity {
                                 i.putExtra("id",id);
                                 startActivity(i);
                             }
-                        }, 5000); // 5 seconds
+                        }, 2000); // 5 seconds
                     }
                 });
 

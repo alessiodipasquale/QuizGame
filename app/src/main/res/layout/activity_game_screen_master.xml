@@ -4,29 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameScreenMaster">
+    tools:context=".GameScreenMaster" >
 
-    <TextView
-        android:id="@+id/textView13"
+    <Button
+        android:id="@+id/btnNextQuestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="I giocatori sono alla domanda..."
-        android:textSize="25dp"
-        app:layout_constraintBottom_toTopOf="@+id/tvNumberOfQuestion"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.29000002" />
-
-    <TextView
-        android:id="@+id/tvNumberOfQuestion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:textSize="25dp"
-        android:textStyle="bold"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/gradient_red"
+        android:fontFamily="@font/roboto_bold"
+        android:padding="10dp"
+        android:text="Prossima domanda"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ListView
+        android:id="@+id/ranking"
+        android:layout_width="402dp"
+        android:layout_height="495dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnNextQuestion"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintTop_toBottomOf="@+id/currentQuestionTv">
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/currentQuestionTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/roboto_light"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

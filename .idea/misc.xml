@@ -28,12 +28,14 @@
         <entry key="app/src/main/res/layout/activity_choose_role.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/activity_configure_game.xml" value="0.39616241455078116" />
         <entry key="app/src/main/res/layout/activity_game_screen.xml" value="0.36993103027343754" />
+        <entry key="app/src/main/res/layout/activity_game_screen_master.xml" value="0.24144439697265618" />
         <entry key="app/src/main/res/layout/activity_loading_screen.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.34663238525390627" />
-        <entry key="app/src/main/res/layout/activity_waiting_for_question.xml" value="0.2078125" />
+        <entry key="app/src/main/res/layout/activity_waiting_for_question.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_waiting_room.xml" value="0.20364583333333333" />
         <entry key="app/src/main/res/layout/edit_question_card.xml" value="0.47507019042968746" />
         <entry key="app/src/main/res/layout/question_card.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/ranking_list_element.xml" value="0.21933848063151037" />
         <entry key="app/src/main/res/layout/round.xml" value="0.18072916666666666" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.211" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.211" />
