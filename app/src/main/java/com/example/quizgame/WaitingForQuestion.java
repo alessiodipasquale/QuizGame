@@ -17,6 +17,8 @@ public class WaitingForQuestion extends AppCompatActivity {
 
         SocketIoManager ioManager = new SocketIoManager();
 
+        System.out.println(ioManager.getSocket().connected());
+
         ioManager.getSocket().on("question", args -> {
             System.out.println("QUESTION");
             Intent i = new Intent(WaitingForQuestion.this, GameScreen.class);
@@ -30,12 +32,13 @@ public class WaitingForQuestion extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 public void run() {
                     Toast.makeText(getApplicationContext(), "Partita terminata.", Toast.LENGTH_LONG).show();
+                    ioManager.getSocket().disconnect();
+                    Intent i = new Intent(WaitingForQuestion.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
                 }
             });
-            //ioManager.getSocket().disconnect();
-            Intent i = new Intent(WaitingForQuestion.this, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
+
         });
 
 

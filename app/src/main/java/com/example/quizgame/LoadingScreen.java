@@ -27,6 +27,7 @@ public class LoadingScreen extends AppCompatActivity {
 
         ioManager.getSocket().on("question", args -> {
             System.out.println("QUESTION");
+            System.out.println("ID QUESTION"+id);
             Intent i = new Intent(LoadingScreen.this, GameScreen.class);
             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.putExtra("question",args[0].toString());

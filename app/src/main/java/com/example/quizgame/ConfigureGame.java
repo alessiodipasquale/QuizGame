@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -116,10 +117,21 @@ public class ConfigureGame extends AppCompatActivity {
 
                 if(ioManager.getSocket().connected())
                     ioManager.getSocket().emit("configureGame", item, (Ack) args -> {
-                        Intent i = new Intent(ConfigureGame.this, WaitingRoom.class);
-                        i.putExtra("id", gameId);
-                        i.putExtra("numberOfPlayers", numberOfPlayers);
-                        startActivity(i);
+                        JSONObject response = (JSONObject) args[0];
+
+
+                        if (response.has("id")) {
+                            Intent i = new Intent(ConfigureGame.this, WaitingRoom.class);
+                            i.putExtra("id", gameId);
+                            i.putExtra("numberOfPlayers", numberOfPlayers);
+                            startActivity(i);
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "Nome già utilizzato.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
                     });
                 else
                     ioManager.goToHome(ConfigureGame.this);
@@ -163,4 +175,12 @@ public class ConfigureGame extends AppCompatActivity {
         return allQuestionsInJsonArray;
     }
 
+    @Override
+    protected void onDestroy() {
+        System.out.println("onDestroy");
+        SocketIoManager ioManager = new SocketIoManager();
+        ioManager.disconnect();
+        ioManager.goToHome(ConfigureGame.this);
+        super.onDestroy();
+    }
 }

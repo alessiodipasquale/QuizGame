@@ -24,9 +24,9 @@
 
     <ListView
         android:id="@+id/ranking"
-        android:layout_width="402dp"
-        android:layout_height="495dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="400dp"
+        android:layout_height="384dp"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toTopOf="@+id/btnNextQuestion"
         app:layout_constraintEnd_toEndOf="parent"

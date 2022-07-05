@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,10 +65,10 @@ public class ChooseLobby extends AppCompatActivity {
                             for (int i = 0; i < items.length(); i++) {
                                 JSONObject elem = (JSONObject) items.getJSONObject(i);
 
-                                String listElem = list.get(index).toString();
+                                String listElem = list.get(i).toString();
                                 String elemName = elem.get("name").toString();
 
-                                if ( listElem.compareTo(elemName) == 0) {
+                                if ( listElem == elemName) {
                                     System.out.println(elem);
                                     System.out.println(list.get(i));
                                     JSONObject data = new JSONObject();
@@ -143,6 +144,7 @@ public class ChooseLobby extends AppCompatActivity {
                 public void run() {
 
                         try {
+
                             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                             list.add(response.get("name"));
                             adapter.notifyDataSetChanged();
@@ -159,7 +161,6 @@ public class ChooseLobby extends AppCompatActivity {
             //System.out.println(response.getJSONObject(0).get("name"));
         });
 
-
         ioManager.getSocket().on("gameNowPlaying", args -> {
             String name = (String) args[0];
 
@@ -168,16 +169,41 @@ public class ChooseLobby extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                    int index = list.indexOf(name);
-                    list.remove(index);
-                    adapter.notifyDataSetChanged();
-
+                    if (list.contains(name)) {
+                        int index = list.indexOf(name);
+                        list.remove(index);
+                        adapter.notifyDataSetChanged();
+                    }
                     if(list.size() == 0)
                         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
                 }
             });
 
+        });
+
+        ioManager.getSocket().on("gameDeletedByAdmin", args -> {
+            JSONObject response = (JSONObject) args[0];
+            try {
+                for (int i = 0; i < items.length(); i++) {
+                    try {
+                        if(items.getJSONObject(i).get("id") == response.get("id")){
+                            items.remove(i);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                list.remove(response.get("name"));
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        if(list.size() == 0)
+                            findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+                        adapter.notifyDataSetChanged();
+                    }});
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         });
     }
 }

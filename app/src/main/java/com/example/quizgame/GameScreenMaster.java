@@ -37,6 +37,8 @@ public class GameScreenMaster extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+
         ranking = (ListView) findViewById(R.id.ranking);
         nextQuestionButton = (Button) findViewById(R.id.btnNextQuestion);
 
@@ -62,7 +64,7 @@ public class GameScreenMaster extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         try {
-                            currentQuestion.setText("Domanda " + (Integer) res.get("currentQuestion") + 1);
+                            currentQuestion.setText("Domanda " + (int) ((int)res.get("currentQuestion") + 1));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -82,12 +84,13 @@ public class GameScreenMaster extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 public void run() {
                     Toast.makeText(getApplicationContext(), "Partita terminata.", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(GameScreenMaster.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
                 }
             });
             //ioManager.getSocket().disconnect();
-            Intent intent = new Intent(GameScreenMaster.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
+
         });
 
       /*

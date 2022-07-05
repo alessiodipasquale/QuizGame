@@ -81,9 +81,10 @@ public class GameScreen extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
                                 Intent i = new Intent(GameScreen.this, WaitingForQuestion.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK /*| Intent.FLAG_ACTIVITY_CLEAR_TASK*/);
                                 i.putExtra("id",id);
                                 startActivity(i);
+                                finish();
                             }
                         }, 2000); // 5 seconds
                     }
