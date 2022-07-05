@@ -15,7 +15,7 @@
         android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/black"
-        android:textSize="30sp"
+        android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,6 @@
         android:id="@+id/etNumberPlayers"
         android:layout_width="307dp"
         android:layout_height="48dp"
-        android:layout_marginTop="104dp"
         android:digits="0123456789."
         android:ems="10"
         android:inputType="numberDecimal"
@@ -36,13 +35,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <EditText
         android:id="@+id/etGameName"
         android:layout_width="307dp"
         android:layout_height="48dp"
-        android:layout_marginTop="4dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Gioco"
@@ -73,18 +71,16 @@
         android:paddingStart="3dp"
         android:text="Inserisci numero massimo di giocatori"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/etNumberPlayers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etGameName"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintTop_toBottomOf="@+id/etGameName" />
 
     <Button
         android:id="@+id/btnNewQuestion"
         android:layout_width="150dp"
         android:layout_height="54dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/gradient_red"
         android:fontFamily="@font/roboto_bold"
         android:text="Nuova domanda"
@@ -100,7 +96,7 @@
         android:id="@+id/btnPlay"
         android:layout_width="150dp"
         android:layout_height="54dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/gradient_red"
         android:fontFamily="@font/roboto_bold"
         android:text="Si gioca!"
@@ -124,8 +120,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="30dp"
+        android:layout_marginBottom="16dp"
         android:isScrollContainer="true"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"

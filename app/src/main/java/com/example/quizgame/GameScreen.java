@@ -5,21 +5,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.socket.client.Ack;
+
 public class GameScreen extends AppCompatActivity {
     public int counter;
     TextView timerTv;
-    int reponseIndex;
+    String id;
+    String actualQuestion;
+    Button selectedButton;
+    int responseIndex;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+
+
+        Intent i = getIntent();
+        id = i.getExtras().getString("id");
+
         TextView questionTv = (TextView) findViewById(R.id.questionTv);
         Button answer1 = (Button) findViewById(R.id.answer1);
         Button answer2 = (Button) findViewById(R.id.answer2);
@@ -42,11 +55,46 @@ public class GameScreen extends AppCompatActivity {
 
         SocketIoManager ioManager = new SocketIoManager();
 
+        ioManager.getSocket().on("endTimer", args -> {
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("id",id);
+                obj.put("responseIndex", responseIndex);
+                obj.put("actualQuestion",actualQuestion);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            ioManager.getSocket().emit("sendAnswer", obj, (Ack) res -> {
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Boolean correct = (Boolean) res[0];
+                        if(correct) {
+                            selectedButton.setEnabled(true);
+                            selectedButton.setBackgroundResource(R.drawable.green_border);
+                        } else {
+                            selectedButton.setEnabled(true);
+                            selectedButton.setBackgroundResource(R.drawable.red_border);
+                        }
+                        new Handler().postDelayed(new Runnable() {
+                            public void run() {
+                                Intent i = new Intent(GameScreen.this, WaitingForQuestion.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                i.putExtra("id",id);
+                                startActivity(i);
+                            }
+                        }, 5000); // 5 seconds
+                    }
+                });
+
+            });
+        });
 
         if(getIntent().hasExtra("question")) {
             System.out.println("QUESTION DA GAMESCREEN");
             try {
                 JSONObject response = new JSONObject(getIntent().getStringExtra("question"));
+                actualQuestion = response.get("question").toString();
                 questionTv.setText(response.get("question").toString());
                 answer1.setText(response.get("answer1").toString());
                 answer2.setText(response.get("answer2").toString());
@@ -61,48 +109,52 @@ public class GameScreen extends AppCompatActivity {
         answer1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reponseIndex = 1;
+                responseIndex = 1;
                 answer1.setEnabled(false);
                 answer2.setEnabled(false);
                 answer3.setEnabled(false);
                 answer4.setEnabled(false);
                 answer1.setBackgroundResource(R.drawable.yellow_border);
+                selectedButton = answer1;
             }
         });
 
         answer2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reponseIndex = 1;
+                responseIndex = 2;
                 answer1.setEnabled(false);
                 answer2.setEnabled(false);
                 answer3.setEnabled(false);
                 answer4.setEnabled(false);
                 answer2.setBackgroundResource(R.drawable.yellow_border);
+                selectedButton = answer2;
             }
         });
 
         answer3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reponseIndex = 1;
+                responseIndex = 3;
                 answer1.setEnabled(false);
                 answer2.setEnabled(false);
                 answer3.setEnabled(false);
                 answer4.setEnabled(false);
                 answer3.setBackgroundResource(R.drawable.yellow_border);
+                selectedButton = answer3;
             }
         });
 
         answer4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reponseIndex = 1;
+                responseIndex = 4;
                 answer1.setEnabled(false);
                 answer2.setEnabled(false);
                 answer3.setEnabled(false);
                 answer4.setEnabled(false);
                 answer4.setBackgroundResource(R.drawable.yellow_border);
+                selectedButton = answer4;
             }
         });
 

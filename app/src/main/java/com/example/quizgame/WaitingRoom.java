@@ -30,6 +30,8 @@ public class WaitingRoom extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_room);
 
+
+
         listOfPlayers = (ListView) findViewById(R.id.listOfPlayers);
         adapter = new ArrayAdapter(WaitingRoom.this, android.R.layout.simple_list_item_1, list);
         listOfPlayers.setAdapter(adapter);
@@ -55,7 +57,10 @@ public class WaitingRoom extends AppCompatActivity {
 
                 if(ioManager.getSocket().connected())
                     ioManager.getSocket().emit("startGame", item, (Ack) args -> {
-                        startActivity(new Intent(WaitingRoom.this, GameScreenMaster.class));
+                        Intent i = new Intent(WaitingRoom.this, GameScreenMaster.class);
+                        i.putExtra("id",id);
+                        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
                     });
                 else
                     ioManager.goToHome(WaitingRoom.this);

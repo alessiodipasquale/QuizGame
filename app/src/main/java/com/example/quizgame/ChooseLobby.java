@@ -73,8 +73,11 @@ public class ChooseLobby extends AppCompatActivity {
                                     JSONObject data = new JSONObject();
                                     data.put("id", elem.get("id"));
                                     data.put("name",name);
+                                    Intent intent = new Intent(ChooseLobby.this, LoadingScreen.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.putExtra("id",elem.get("id").toString());
                                     ioManager.getSocket().emit("joinGame", data, (Ack)args -> {
-                                        startActivity(new Intent(ChooseLobby.this, LoadingScreen.class));
+                                        startActivity(intent);
                                     });
                                 }
                             }
