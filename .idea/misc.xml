@@ -18,8 +18,11 @@
         <entry key="app/src/main/res/drawable/gradient_red_norounded.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/gradient_red_rb.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/green_border.xml" value="0.215" />
+        <entry key="app/src/main/res/drawable/green_dot.xml" value="0.218" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.19" />
+        <entry key="app/src/main/res/drawable/orange_dot.xml" value="0.219" />
         <entry key="app/src/main/res/drawable/red_border.xml" value="0.215" />
+        <entry key="app/src/main/res/drawable/red_dot.xml" value="0.219" />
         <entry key="app/src/main/res/drawable/round.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/rounded.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/yellow_border.xml" value="0.21" />
@@ -28,14 +31,14 @@
         <entry key="app/src/main/res/layout/activity_choose_role.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/activity_configure_game.xml" value="0.39616241455078116" />
         <entry key="app/src/main/res/layout/activity_game_screen.xml" value="0.36993103027343754" />
-        <entry key="app/src/main/res/layout/activity_game_screen_master.xml" value="0.24144439697265618" />
+        <entry key="app/src/main/res/layout/activity_game_screen_master.xml" value="0.3519210815429687" />
         <entry key="app/src/main/res/layout/activity_loading_screen.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.34663238525390627" />
-        <entry key="app/src/main/res/layout/activity_waiting_for_question.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_waiting_for_question.xml" value="0.186474609375" />
         <entry key="app/src/main/res/layout/activity_waiting_room.xml" value="0.20364583333333333" />
         <entry key="app/src/main/res/layout/edit_question_card.xml" value="0.47507019042968746" />
         <entry key="app/src/main/res/layout/question_card.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/ranking_list_element.xml" value="0.21933848063151037" />
+        <entry key="app/src/main/res/layout/ranking_list_element.xml" value="0.39979044596354163" />
         <entry key="app/src/main/res/layout/round.xml" value="0.18072916666666666" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.211" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.211" />

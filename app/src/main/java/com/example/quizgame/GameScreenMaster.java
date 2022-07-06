@@ -21,6 +21,8 @@ public class GameScreenMaster extends AppCompatActivity {
     String id;
     ListView ranking;
     Button nextQuestionButton;
+    RankingAdapter adapter;
+    JSONArray players;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +72,9 @@ public class GameScreenMaster extends AppCompatActivity {
                         }
                     }});
                 System.out.println(res.get("players").toString());
-                JSONArray players = (JSONArray) res.get("players");
-                RankingAdapter customAdapter = new RankingAdapter(getApplicationContext(), players);
-                ranking.setAdapter(customAdapter);
+                players = (JSONArray) res.get("players");
+                adapter = new RankingAdapter(getApplicationContext(), players, (int)res.get("currentQuestion") + 1);
+                ranking.setAdapter(adapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -93,21 +95,27 @@ public class GameScreenMaster extends AppCompatActivity {
 
         });
 
-      /*
-      Aggiornamento della tabella della classifica
+
+     // Aggiornamento della tabella della classifica
 
       ioManager.getSocket().on("playerAnswered", args -> {
             JSONObject res = (JSONObject) args[0];
-            try {
-                System.out.println(res.get("players").toString());
-                JSONArray players = (JSONArray) res.get("players");
-                RankingAdapter customAdapter = new RankingAdapter(getApplicationContext(), players);
-                ranking.setAdapter(customAdapter);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
 
-        });*/
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        try {
+                            System.out.println(res.get("players").toString());
+                            players = (JSONArray) res.get("players");
+                            adapter.updateRankings(players);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }});
+
+
+
+
+        });
     }
 }
 
