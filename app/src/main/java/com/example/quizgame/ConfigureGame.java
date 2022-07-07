@@ -38,6 +38,7 @@ public class ConfigureGame extends AppCompatActivity {
     public Button btnPlay;
 
     public Context context;
+    SocketIoManager ioManager;
     public String gameName;
     public String gameId;
     public String numberOfPlayers;
@@ -58,25 +59,17 @@ public class ConfigureGame extends AppCompatActivity {
                         if (result.getResultCode() == 1) {
                             // There are no request codes
                             Intent i = result.getData();
-
                             Bundle dati = i.getExtras();
-                            String correctAnswer = dati.getString("correct");
+                            Integer correctAnswer = dati.getInt("correctIndex");
                             String question = dati.getString("question");
 
                             Log.wtf("2", "onActivityResult: question: " + question + " correct: " + correctAnswer );
 
                             ArrayList<DataSourceItem.Answer> answers = new ArrayList<DataSourceItem.Answer>();
-                            String a1 = dati.getString("answer1");
-                            answers.add(new DataSourceItem.Answer(a1, a1.compareTo(correctAnswer) == 0));
-
-                            String a2 = dati.getString("answer2");
-                            answers.add(new DataSourceItem.Answer(a2, a2.compareTo(correctAnswer) == 0));
-
-                            String a3 = dati.getString("answer3");
-                            answers.add(new DataSourceItem.Answer(a3, a3.compareTo(correctAnswer) == 0));
-
-                            String a4 = dati.getString("answer4");
-                            answers.add(new DataSourceItem.Answer(a4, a4.compareTo(correctAnswer) == 0));
+                            answers.add(new DataSourceItem.Answer(dati.getString("answer1"), correctAnswer == 1));
+                            answers.add(new DataSourceItem.Answer(dati.getString("answer2"), correctAnswer == 2));
+                            answers.add(new DataSourceItem.Answer(dati.getString("answer3"), correctAnswer == 3));
+                            answers.add(new DataSourceItem.Answer(dati.getString("answer4"), correctAnswer == 4));
 
                             DataSourceItem d = new DataSourceItem(question, answers);
                             questionAdapter.addQuestion(d);
@@ -84,7 +77,7 @@ public class ConfigureGame extends AppCompatActivity {
                     }
                 });
 
-        SocketIoManager ioManager = new SocketIoManager();
+        ioManager = new SocketIoManager();
         if(ioManager.getSocket().connected())
             ioManager.getSocket().emit("createGame", null, args -> {
                 this.gameId = (String) args[0];
@@ -162,7 +155,7 @@ public class ConfigureGame extends AppCompatActivity {
                 for (DataSourceItem.Answer answer : question.getAnswer()) {
                     q.put("answer".concat(i.toString()),answer.text);
                     if(answer.isCorrect)
-                        q.put("correctIndex",i);
+                        q.put("correctIndex", i);
                     i = i+1;
                 }
                 allQuestionsInJsonArray.put(q);
@@ -173,6 +166,15 @@ public class ConfigureGame extends AppCompatActivity {
 
         }
         return allQuestionsInJsonArray;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(ioManager.getSocket().connected())
+            ioManager.getSocket().emit("disconnect", (Ack) args -> {
+                Log.wtf("2", "onBackPressed: disconnesso");
+            });
+            super.onBackPressed();
     }
 
     @Override

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -55,8 +56,11 @@ public class WaitingRoom extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                Log.wtf("2", "onClick: PRIMA DELLA CHIAMATA ID: " + id);
                 if(ioManager.getSocket().connected())
                     ioManager.getSocket().emit("startGame", item, (Ack) args -> {
+                        Log.wtf("2", "onClick: NELLA CALLBACK ID: " + id);
+
                         Intent i = new Intent(WaitingRoom.this, GameScreenMaster.class);
                         i.putExtra("id",id);
                         i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);

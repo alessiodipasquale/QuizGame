@@ -38,26 +38,26 @@ public class EditQeA extends AppCompatActivity {
 
     static WebApiController api;
 
-    EditText correct = null;
+    Integer correct = 0;
     //#endregion
 
     String id;
     String name;
-    String numberOfPlayers;
+    Integer numberOfPlayers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_question_card);
-
+/*
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             this.id = extras.getString("id");
             this.name = extras.getString("name");
             //magari cambia string con int
-            this.numberOfPlayers = extras.getString("numberOfPlayers");
+            this.numberOfPlayers = extras.getInt("numberOfPlayers");
         }
-
+*/
         this.api = new WebApiController();
 
         //#region Declatarion
@@ -78,29 +78,28 @@ public class EditQeA extends AppCompatActivity {
         rbAnswer1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                correct = edAnswer1;
+                correct = 1;
             }
         });
         rbAnswer2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                correct = edAnswer2;
+                correct = 2;
             }
         });
         rbAnswer3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                correct = edAnswer3;
+                correct = 3;
             }
         });
         rbAnswer4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                correct = edAnswer4;
+                correct = 4;
             }
         });
         //#endregion
-
 
         //#region Initialize buttons
 /*
@@ -133,22 +132,11 @@ public class EditQeA extends AppCompatActivity {
 
                     Intent i = new Intent();
                     i.putExtra("question", edQuestion.getText().toString());
-                    Log.wtf("2", "question: " + edQuestion.getText().toString());
-
                     i.putExtra("answer1", edAnswer1.getText().toString());
-                    Log.wtf("2", "| " + edAnswer1.getText().toString());
-
                     i.putExtra("answer2", edAnswer2.getText().toString());
-                    Log.wtf("2", "| " + edAnswer2.getText().toString());
-
                     i.putExtra("answer3", edAnswer3.getText().toString());
-                    Log.wtf("2", "| " + edAnswer3.getText().toString());
-
                     i.putExtra("answer4", edAnswer4.getText().toString());
-                    Log.wtf("2", "| " + edAnswer4.getText().toString());
-
-                    i.putExtra("correct", correct.getText().toString());
-                    Log.wtf("2", "| " + correct.getText().toString());
+                    i.putExtra("correctIndex", correct);
 
                     setResult(1, i);
                     finish();

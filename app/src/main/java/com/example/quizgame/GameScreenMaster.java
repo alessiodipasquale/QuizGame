@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -73,8 +74,12 @@ public class GameScreenMaster extends AppCompatActivity {
                     }});
                 System.out.println(res.get("players").toString());
                 players = (JSONArray) res.get("players");
+                Log.wtf("2", "onCreate: giocatori: " +players );
                 adapter = new RankingAdapter(getApplicationContext(), players, (int)res.get("currentQuestion") + 1);
+
+                Log.wtf("2", "Fine thread" );
                 ranking.setAdapter(adapter);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
