@@ -86,7 +86,9 @@ public class GameScreen extends AppCompatActivity {
                                 i.putExtra("id",id);
                                 startActivity(i);
                                 finish();
-                            }
+                                ioManager.getSocket().on("endTimer", args -> {
+                                });
+                                }
                         }, 2000); // 5 seconds
                     }
                 });
