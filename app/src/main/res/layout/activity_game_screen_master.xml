@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".GameScreenMaster" >
 
+    <TextView
+        android:id="@+id/timerAdmin"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/round"
+        android:fontFamily="@font/roboto_bold"
+        android:gravity="center"
+        android:textColor="@color/red"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.867"
+        app:layout_constraintStart_toEndOf="@+id/logo3"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/btnNextQuestion"
         android:layout_width="wrap_content"

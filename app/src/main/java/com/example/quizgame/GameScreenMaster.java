@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,7 @@ public class GameScreenMaster extends AppCompatActivity {
     Button nextQuestionButton;
     RankingAdapter adapter;
     JSONArray players;
+    TextView timerTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,21 @@ public class GameScreenMaster extends AppCompatActivity {
         }
 
 
+        timerTv= (TextView) findViewById(R.id.timerAdmin);
+
+        CountDownTimer timer = new CountDownTimer(10000, 1000){
+            public void onTick(long millisUntilFinished){
+                System.out.println(String.valueOf(millisUntilFinished / 1000));
+                timerTv.setText(String.valueOf(millisUntilFinished / 1000));
+            }
+            public  void onFinish(){
+                //Da capire
+            }
+        };
+
+        timer.start();
+
+
 
         ranking = (ListView) findViewById(R.id.ranking);
         nextQuestionButton = (Button) findViewById(R.id.btnNextQuestion);
@@ -56,6 +73,7 @@ public class GameScreenMaster extends AppCompatActivity {
                             TextView currentQuestion = findViewById(R.id.currentQuestionTv);
                             currentQuestion.setText("Domanda " + (Integer) ack[0]);
                             try {
+                                timer.start();
                                 adapter.updateRankings(players, true);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -102,10 +120,10 @@ public class GameScreenMaster extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Partita terminata.", Toast.LENGTH_LONG).show();
                 }
             });
-            Intent intent = new Intent(GameScreenMaster.this, MainActivity.class);
-
+            Intent intent = new Intent(GameScreenMaster.this, FinalRanking.class);
+            intent.putExtra("players",args[0].toString());
             //in realtà qui devi andare a far vedere la classifica
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             //ioManager.getSocket().disconnect();
 

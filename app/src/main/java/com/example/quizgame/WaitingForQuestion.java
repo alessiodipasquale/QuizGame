@@ -33,7 +33,8 @@ public class WaitingForQuestion extends AppCompatActivity {
                 public void run() {
                     Toast.makeText(getApplicationContext(), "Partita terminata.", Toast.LENGTH_LONG).show();
                     ioManager.getSocket().disconnect();
-                    Intent i = new Intent(WaitingForQuestion.this, MainActivity.class);
+                    Intent i = new Intent(WaitingForQuestion.this, FinalRanking.class);
+                    i.putExtra("players",args[0].toString());
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                 }
