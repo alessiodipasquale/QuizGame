@@ -55,6 +55,11 @@ public class GameScreenMaster extends AppCompatActivity {
                         public void run() {
                             TextView currentQuestion = findViewById(R.id.currentQuestionTv);
                             currentQuestion.setText("Domanda " + (Integer) ack[0]);
+                            try {
+                                adapter.updateRankings(players, true);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }});
                 });
             }
@@ -115,7 +120,7 @@ public class GameScreenMaster extends AppCompatActivity {
                         try {
                             System.out.println(res.get("players").toString());
                             players = (JSONArray) res.get("players");
-                            adapter.updateRankings(players);
+                            adapter.updateRankings(players, false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

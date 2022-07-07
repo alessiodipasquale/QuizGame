@@ -23,6 +23,7 @@ public class RankingAdapter extends BaseAdapter {
     LayoutInflater inflter;
     int currentQuestion;
 
+    Boolean clean = true;
     public RankingAdapter(Context applicationContext, JSONArray players, int currentQuestion) {
         this.context = applicationContext;
         this.players = players;
@@ -45,8 +46,8 @@ public class RankingAdapter extends BaseAdapter {
         return 0;
     }
 
-    public void updateRankings(JSONArray newRanking) throws JSONException {
-
+    public void updateRankings(JSONArray newRanking, Boolean clean) throws JSONException {
+        this.clean = clean;
         JSONArray sortedJsonArray = new JSONArray();
 
         List<JSONObject> jsonValues = new ArrayList<JSONObject>();
@@ -59,12 +60,12 @@ public class RankingAdapter extends BaseAdapter {
 
             @Override
             public int compare(JSONObject a, JSONObject b) {
-                String valA = new String();
-                String valB = new String();
+                Integer valA = new Integer(0);
+                Integer valB = new Integer(0);
 
                 try {
-                    valA = (String) a.get(KEY_NAME);
-                    valB = (String) b.get(KEY_NAME);
+                    valA = (Integer) a.get(KEY_NAME);
+                    valB = (Integer) b.get(KEY_NAME);
                 }
                 catch (JSONException e) {
                     //do something
@@ -98,10 +99,10 @@ public class RankingAdapter extends BaseAdapter {
             position.setText(pos);
             playerName.setText(player.get("name").toString());
 
-            if((int)player.get("answerCount") < this.currentQuestion) {
+            if(this.clean) {
                 answered.setImageResource(R.drawable.orange_dot);
             }else{
-                if((int)player.get("answerCount") == (int)player.get("points")) {
+                if((Boolean) player.get("lastAnswer")) {
                     answered.setImageResource(R.drawable.green_dot);
                 } else {
                     answered.setImageResource(R.drawable.red_dot);

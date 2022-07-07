@@ -168,14 +168,14 @@ public class ConfigureGame extends AppCompatActivity {
         return allQuestionsInJsonArray;
     }
 
-    @Override
+   /* @Override
     public void onBackPressed() {
         if(ioManager.getSocket().connected())
             ioManager.getSocket().emit("disconnect", (Ack) args -> {
                 Log.wtf("2", "onBackPressed: disconnesso");
             });
             super.onBackPressed();
-    }
+    }*/
 
     @Override
     protected void onDestroy() {

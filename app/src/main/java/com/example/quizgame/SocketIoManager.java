@@ -54,12 +54,12 @@ public class SocketIoManager {
         }
     }
 
-    public void disconnect() {
+    /*public void disconnect() {
         this.socket.disconnect();
-    }
+    }*/
 
     public Socket getSocket() {
-        return this.socket;
+        return socket;
     }
 
 }

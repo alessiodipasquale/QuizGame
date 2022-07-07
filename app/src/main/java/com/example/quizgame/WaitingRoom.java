@@ -61,7 +61,7 @@ public class WaitingRoom extends AppCompatActivity {
 
                         Intent i = new Intent(WaitingRoom.this, GameScreenMaster.class);
                         i.putExtra("id",id);
-                        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP /*| Intent.FLAG_ACTIVITY_CLEAR_TOP*/);
                         startActivity(i);
                     });
                 else

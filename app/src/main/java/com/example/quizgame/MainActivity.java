@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         SocketIoManager ioManager = new SocketIoManager();
-        ioManager.disconnect();
+        //ioManager.disconnect();
         super.onDestroy();
     }
 
