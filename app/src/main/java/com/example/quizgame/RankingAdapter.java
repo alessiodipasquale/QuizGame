@@ -71,7 +71,7 @@ public class RankingAdapter extends BaseAdapter {
                     //do something
                 }
 
-                return valA.compareTo(valB);
+                return -valA.compareTo(valB);
                 //if you want to change the sort order, simply use the following:
                 //return -valA.compareTo(valB);
             }
@@ -81,6 +81,8 @@ public class RankingAdapter extends BaseAdapter {
             sortedJsonArray.put(jsonValues.get(i));
         }
         this.players = sortedJsonArray;
+
+        System.out.println(sortedJsonArray);
 
         this.notifyDataSetChanged();
     }

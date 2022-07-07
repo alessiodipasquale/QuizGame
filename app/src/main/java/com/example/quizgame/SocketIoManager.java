@@ -42,6 +42,7 @@ public class SocketIoManager {
                 this.socket.connect();
             } else {
                 if (!this.socket.connected()) {
+                    this.socket = IO.socket(ip, options);
                     this.socket.connect();
                 }
             }

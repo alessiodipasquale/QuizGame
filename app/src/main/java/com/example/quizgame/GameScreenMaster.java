@@ -100,11 +100,13 @@ public class GameScreenMaster extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 public void run() {
                     Toast.makeText(getApplicationContext(), "Partita terminata.", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(GameScreenMaster.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
                 }
             });
+            Intent intent = new Intent(GameScreenMaster.this, MainActivity.class);
+
+            //in realtà qui devi andare a far vedere la classifica
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             //ioManager.getSocket().disconnect();
 
         });
