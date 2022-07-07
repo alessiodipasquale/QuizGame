@@ -181,7 +181,7 @@ public class ConfigureGame extends AppCompatActivity {
     protected void onDestroy() {
         System.out.println("onDestroy");
         SocketIoManager ioManager = new SocketIoManager();
-        ioManager.disconnect();
+        //ioManager.disconnect();
         ioManager.goToHome(ConfigureGame.this);
         super.onDestroy();
     }

@@ -33,6 +33,7 @@ public class GameScreenMaster extends AppCompatActivity {
 
         Intent i = getIntent();
         id = i.getExtras().getString("id");
+        System.out.println("ID in GameScreenMaster: "+id);
         JSONObject obj = new JSONObject();
         try {
             obj.put("id",id);
@@ -78,7 +79,10 @@ public class GameScreenMaster extends AppCompatActivity {
                 adapter = new RankingAdapter(getApplicationContext(), players, (int)res.get("currentQuestion") + 1);
 
                 Log.wtf("2", "Fine thread" );
-                ranking.setAdapter(adapter);
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        ranking.setAdapter(adapter);
+                    }});
 
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -31,8 +31,6 @@ public class WaitingRoom extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_room);
 
-
-
         listOfPlayers = (ListView) findViewById(R.id.listOfPlayers);
         adapter = new ArrayAdapter(WaitingRoom.this, android.R.layout.simple_list_item_1, list);
         listOfPlayers.setAdapter(adapter);

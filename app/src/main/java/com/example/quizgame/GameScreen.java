@@ -65,6 +65,7 @@ public class GameScreen extends AppCompatActivity {
                 e.printStackTrace();
             }
             ioManager.getSocket().emit("sendAnswer", obj, (Ack) res -> {
+                System.out.println("SENDANSWER");
 
                 runOnUiThread(new Runnable() {
                     public void run() {

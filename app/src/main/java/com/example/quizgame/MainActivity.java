@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity{
                 if(b){
                     etIpAddress.setText("https://quizgame-lam.herokuapp.com");
                 } else {
-                    etIpAddress.setText("http://25.26.251.154:3000");
+                    etIpAddress.setText("http://192.168.1.57:3000");
                 }
             }
         });
