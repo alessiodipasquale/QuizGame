@@ -1,6 +1,7 @@
 package com.example.quizgame;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import io.socket.client.Ack;
 
 public class GameScreenMaster extends AppCompatActivity {
@@ -23,6 +26,7 @@ public class GameScreenMaster extends AppCompatActivity {
     String id;
     ListView ranking;
     Button nextQuestionButton;
+    Button addQuestion;
     RankingAdapter adapter;
     JSONArray players;
     TextView timerTv;
@@ -43,32 +47,39 @@ public class GameScreenMaster extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         timerTv= (TextView) findViewById(R.id.timerAdmin);
-
-        CountDownTimer timer = new CountDownTimer(10000, 1000){
+        CountDownTimer timer = new CountDownTimer(14000, 1000){
             public void onTick(long millisUntilFinished){
                 System.out.println(String.valueOf(millisUntilFinished / 1000));
                 timerTv.setText(String.valueOf(millisUntilFinished / 1000));
             }
             public  void onFinish(){
-                //Da capire
                 nextQuestionButton.setVisibility(View.VISIBLE);
+                addQuestion.setVisibility(View.INVISIBLE);
             }
         };
 
         timer.start();
 
-
-
         ranking = (ListView) findViewById(R.id.ranking);
         nextQuestionButton = (Button) findViewById(R.id.btnNextQuestion);
+        addQuestion = (Button) findViewById(R.id.btnAddQuestion);
+
+        addQuestion.setVisibility(View.VISIBLE);
         nextQuestionButton.setVisibility(View.INVISIBLE);
+
+        addQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(GameScreenMaster.this, EditQeA.class));
+            }
+        });
 
         nextQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 nextQuestionButton.setVisibility(View.INVISIBLE);
+                addQuestion.setVisibility(View.VISIBLE);
 
                 ioManager.getSocket().emit("nextQuestion", obj, (Ack)ack -> {
                     runOnUiThread(new Runnable() {
@@ -85,7 +96,6 @@ public class GameScreenMaster extends AppCompatActivity {
                 });
             }
         });
-
 
         ioManager.getSocket().emit("getGameInfo", obj, (Ack) args -> {
             JSONObject res = (JSONObject) args[0];
@@ -116,7 +126,6 @@ public class GameScreenMaster extends AppCompatActivity {
             /**/
         });
 
-
         ioManager.getSocket().on("gameEnded", args -> {
             runOnUiThread(new Runnable() {
                 public void run() {
@@ -132,12 +141,9 @@ public class GameScreenMaster extends AppCompatActivity {
 
         });
 
-
      // Aggiornamento della tabella della classifica
-
       ioManager.getSocket().on("playerAnswered", args -> {
             JSONObject res = (JSONObject) args[0];
-
                 runOnUiThread(new Runnable() {
                     public void run() {
                         try {
@@ -148,11 +154,27 @@ public class GameScreenMaster extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }});
-
-
-
-
         });
+    }
+
+    @Override
+    protected void onResume() {
+        //qui sarà tornata da EditQeA e dovrà aggiungere la domanda
+
+        Intent i = getIntent();
+        Bundle dati = i.getExtras();
+        Integer correctAnswer = dati.getInt("correctIndex");
+        String question = dati.getString("question");
+
+        ArrayList<DataSourceItem.Answer> answers = new ArrayList<DataSourceItem.Answer>();
+        answers.add(new DataSourceItem.Answer(dati.getString("answer1"), correctAnswer == 1));
+        answers.add(new DataSourceItem.Answer(dati.getString("answer2"), correctAnswer == 2));
+        answers.add(new DataSourceItem.Answer(dati.getString("answer3"), correctAnswer == 3));
+        answers.add(new DataSourceItem.Answer(dati.getString("answer4"), correctAnswer == 4));
+
+        DataSourceItem d = new DataSourceItem(question, answers);
+
+        super.onResume();
     }
 }
 
