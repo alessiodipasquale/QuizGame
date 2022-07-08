@@ -1,11 +1,16 @@
 package com.example.quizgame;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +42,8 @@ public class GameScreenMaster extends AppCompatActivity {
         setContentView(R.layout.activity_game_screen_master);
         SocketIoManager ioManager = new SocketIoManager();
 
+
+
         Intent i = getIntent();
         id = i.getExtras().getString("id");
         System.out.println("ID in GameScreenMaster: "+id);
@@ -48,39 +55,88 @@ public class GameScreenMaster extends AppCompatActivity {
         }
 
         timerTv= (TextView) findViewById(R.id.timerAdmin);
-        CountDownTimer timer = new CountDownTimer(14000, 1000){
+        CountDownTimer timer = new CountDownTimer(10000, 1000){
             public void onTick(long millisUntilFinished){
                 System.out.println(String.valueOf(millisUntilFinished / 1000));
                 timerTv.setText(String.valueOf(millisUntilFinished / 1000));
             }
             public  void onFinish(){
-                nextQuestionButton.setVisibility(View.VISIBLE);
-                addQuestion.setVisibility(View.INVISIBLE);
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        nextQuestionButton.setEnabled(true);
+                    }
+                }, 4000);
             }
         };
 
         timer.start();
 
+        ActivityResultLauncher<Intent> activityResultLauncher;
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == 1) {
+                            Intent i = result.getData();
+                            Bundle dati = i.getExtras();
+
+                            System.out.println(dati.getString("question"));
+                            System.out.println(dati.getInt("correctIndex"));
+
+                            Integer correctAnswer = dati.getInt("correctIndex");
+                            String question = dati.getString("question");
+
+                            ArrayList<DataSourceItem.Answer> answers = new ArrayList<DataSourceItem.Answer>();
+                            answers.add(new DataSourceItem.Answer(dati.getString("answer1"), correctAnswer == 1));
+                            answers.add(new DataSourceItem.Answer(dati.getString("answer2"), correctAnswer == 2));
+                            answers.add(new DataSourceItem.Answer(dati.getString("answer3"), correctAnswer == 3));
+                            answers.add(new DataSourceItem.Answer(dati.getString("answer4"), correctAnswer == 4));
+
+                            DataSourceItem d = new DataSourceItem(question, answers);
+                            JSONObject q = new JSONObject();
+                            try {
+                                q.put("id",id);
+                                q.put("question",dati.getString("question"));
+                                q.put("answer1",dati.getString("answer1"));
+                                q.put("answer2",dati.getString("answer2"));
+                                q.put("answer3",dati.getString("answer3"));
+                                q.put("answer4",dati.getString("answer4"));
+                                q.put("correctIndex", dati.getInt("correctIndex"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            SocketIoManager ioManager = new SocketIoManager();
+                            ioManager.getSocket().emit("pushNewQuestion", q, (Ack) args -> {
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "Domanda aggiunta", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            });
+
+                        }
+                    }
+                });
+
+
         ranking = (ListView) findViewById(R.id.ranking);
         nextQuestionButton = (Button) findViewById(R.id.btnNextQuestion);
         addQuestion = (Button) findViewById(R.id.btnAddQuestion);
 
-        addQuestion.setVisibility(View.VISIBLE);
-        nextQuestionButton.setVisibility(View.INVISIBLE);
+        nextQuestionButton.setEnabled(false);
 
         addQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(GameScreenMaster.this, EditQeA.class));
+                activityResultLauncher.launch(new Intent(GameScreenMaster.this, EditQeA.class));
             }
         });
 
         nextQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                nextQuestionButton.setVisibility(View.INVISIBLE);
-                addQuestion.setVisibility(View.VISIBLE);
-
                 ioManager.getSocket().emit("nextQuestion", obj, (Ack)ack -> {
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -155,30 +211,8 @@ public class GameScreenMaster extends AppCompatActivity {
                         }
                     }});
         });
+
+
     }
 
-    @Override
-    protected void onResume() {
-        //qui sarà tornata da EditQeA e dovrà aggiungere la domanda
-
-        Intent i = getIntent();
-        Bundle dati = i.getExtras();
-        Integer correctAnswer = dati.getInt("correctIndex");
-        String question = dati.getString("question");
-
-        ArrayList<DataSourceItem.Answer> answers = new ArrayList<DataSourceItem.Answer>();
-        answers.add(new DataSourceItem.Answer(dati.getString("answer1"), correctAnswer == 1));
-        answers.add(new DataSourceItem.Answer(dati.getString("answer2"), correctAnswer == 2));
-        answers.add(new DataSourceItem.Answer(dati.getString("answer3"), correctAnswer == 3));
-        answers.add(new DataSourceItem.Answer(dati.getString("answer4"), correctAnswer == 4));
-
-        DataSourceItem d = new DataSourceItem(question, answers);
-
-        super.onResume();
-    }
 }
-
-   /* ListView simpleList;
-    String countryList[] = {"India", "China", "australia", "Portugle", "America", "NewZealand"};
-    int flags[] = {R.drawable.india, R.drawable.china, R.drawable.australia, R.drawable.portugle, R.drawable.america, R.drawable.new_zealand};
-    */

@@ -23,7 +23,7 @@ public class GameScreen extends AppCompatActivity {
     String id;
     String actualQuestion;
     Button selectedButton;
-    int responseIndex = 0;
+    int responseIndex = 5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -72,30 +72,52 @@ public class GameScreen extends AppCompatActivity {
                     public void run() {
                         try {
                             JSONArray correct = (JSONArray) res[0];
-
+                            System.out.println(correct);
                             if(correct.getBoolean(0)) {
                                 selectedButton.setEnabled(true);
                                 selectedButton.setBackgroundResource(R.drawable.green_border);
                             } else {
-                                if (responseIndex != 0) {
+                                if (responseIndex != 5) {
                                     selectedButton.setEnabled(true);
                                     selectedButton.setBackgroundResource(R.drawable.red_border);
-
+                                }
                                     switch (correct.getInt(1)) {
                                         case 1:
                                             answer1.setBackgroundResource(R.drawable.green_border);
+                                            if (responseIndex == 5) {
+                                                answer2.setBackgroundResource(R.drawable.red_border);
+                                                answer3.setBackgroundResource(R.drawable.red_border);
+                                                answer4.setBackgroundResource(R.drawable.red_border);
+                                            }
                                             break;
                                         case 2:
                                             answer2.setBackgroundResource(R.drawable.green_border);
+                                            if (responseIndex == 5) {
+                                                answer1.setBackgroundResource(R.drawable.red_border);
+                                                answer3.setBackgroundResource(R.drawable.red_border);
+                                                answer4.setBackgroundResource(R.drawable.red_border);
+
+                                            }
                                             break;
                                         case 3:
                                             answer3.setBackgroundResource(R.drawable.green_border);
+                                            if (responseIndex == 5) {
+                                                answer1.setBackgroundResource(R.drawable.red_border);
+                                                answer2.setBackgroundResource(R.drawable.red_border);
+                                                answer4.setBackgroundResource(R.drawable.red_border);
+                                            }
                                             break;
                                         case 4:
                                             answer4.setBackgroundResource(R.drawable.green_border);
+                                            if (responseIndex == 5) {
+                                                answer1.setBackgroundResource(R.drawable.red_border);
+                                                answer2.setBackgroundResource(R.drawable.red_border);
+                                                answer3.setBackgroundResource(R.drawable.red_border);
+
+                                            }
                                             break;
                                     }
-                                }
+
                             }
 
                         } catch (JSONException e) {
