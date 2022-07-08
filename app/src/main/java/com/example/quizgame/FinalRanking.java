@@ -2,13 +2,11 @@ package com.example.quizgame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,49 +15,63 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class FinalRanking extends AppCompatActivity {
-    String players;
-    JSONArray playersData;
+    JSONArray players;
     ArrayList data;
-
+    TextView finalPosition;
+    TextView numberOfCorrectAnswer;
+    Integer numberOfQuestions;
+    Button goHome;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final_ranking);
+        SocketIoManager ioManager = new SocketIoManager();
+
+        finalPosition = (TextView) findViewById(R.id.finalPosition);
+        numberOfCorrectAnswer = (TextView) findViewById(R.id.numberOfCorrectAnswer);
 
         if(getIntent().hasExtra("players")) {
-            players = getIntent().getStringExtra("players");
             try {
-                playersData = new JSONArray(players);
+                JSONObject item = new JSONObject(getIntent().getStringExtra("players"));
+                players = (JSONArray) item.get("players");
+                numberOfQuestions = (Integer) item.get("numberOfQuestions");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             System.out.println(players);
+
+            System.out.println(ioManager.getSocket().id());
+            String socketId = ioManager.getSocket().id();
             try {
-                JSONObject playerObject = new JSONObject(playersData.getString(0));
-                Log.wtf("2", "onCreate: name: " + playerObject.getString("name"));
-                String name = playersData.getString(0);
-                Log.wtf("2", "onCreate: name" + name);
-               /* Integer points = playersData.getInt(2);
-                Log.wtf("2", "onCreate: points" + points.toString());
-                Integer totalQuestions = playersData.getInt(3);
-                Log.wtf("2", "onCreate: totalQuestions" + totalQuestions);*/
-                Log.wtf("2", "onCreate: players:" + playersData.toString());
+               for(int i=0; i<players.length(); i++) {
+                   JSONObject elem = (JSONObject) players.get(i) ;
+                   System.out.println(elem);
+                   System.out.println(elem.get("id"));
+                   if(socketId.compareTo((String)elem.get("id")) == 0) {
+                       System.out.println("ENTRO");
+                       System.out.println(elem);
+                       finalPosition.setText(elem.get("position").toString());
+                       numberOfCorrectAnswer.setText("Hai indovinato "+elem.get("points") + " risposte.");
+                       ioManager.getSocket().disconnect();
+                   }
+               }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        data = new ArrayList();
-        data.add(new BarEntry( 2, 9));
-        data.add(new BarEntry( 3, 6));
-        data.add(new BarEntry( 5, 1));
-        data.add(new BarEntry( 7, 10));
-        data.add(new BarEntry( 10, 4));
+        goHome = (Button) findViewById(R.id.goHome);
+        goHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FinalRanking.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
 
-        BarChart chart = findViewById(R.id.chtRanking);
-        BarDataSet barDataSet = new BarDataSet( data, "Risultati finali");
-        BarData barData = new BarData(barDataSet);
-        chart.setData(barData);
 
     }
 }
