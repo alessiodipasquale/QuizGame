@@ -6,4 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".FinalRanking">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="291dp"
+        android:layout_height="600dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chtRanking"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.github.mikephil.charting.charts.BarChart>
+
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

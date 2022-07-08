@@ -53,6 +53,7 @@ public class GameScreenMaster extends AppCompatActivity {
             }
             public  void onFinish(){
                 //Da capire
+                nextQuestionButton.setVisibility(View.VISIBLE);
             }
         };
 
@@ -62,10 +63,12 @@ public class GameScreenMaster extends AppCompatActivity {
 
         ranking = (ListView) findViewById(R.id.ranking);
         nextQuestionButton = (Button) findViewById(R.id.btnNextQuestion);
+        nextQuestionButton.setVisibility(View.INVISIBLE);
 
         nextQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                nextQuestionButton.setVisibility(View.INVISIBLE);
 
                 ioManager.getSocket().emit("nextQuestion", obj, (Ack)ack -> {
                     runOnUiThread(new Runnable() {

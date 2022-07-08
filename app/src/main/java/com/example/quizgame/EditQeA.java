@@ -102,65 +102,31 @@ public class EditQeA extends AppCompatActivity {
         //#endregion
 
         //#region Initialize buttons
-/*
         btnNextQ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.wtf("2", "onClick: question is "+ edQuestion.getText().toString() );
-
-                if(correct == null) {
+                if(correct == 0) {
                     Toast.makeText(getApplicationContext(), "Seleziona la risposta corretta", Toast.LENGTH_LONG).show();
-                } else {
-                    api.setQuestion(buildDataSourceItem(edQuestion.getText().toString(), edAnswer1.getText().toString(), edAnswer2.getText().toString(), edAnswer3.getText().toString(), edAnswer4.getText().toString(), correct.getText().toString()));
+                } else if(edQuestion.getText().toString().trim().compareTo("") == 0)
+                        Toast.makeText(getApplicationContext(), "Scrivi una domanda", Toast.LENGTH_LONG).show();
+                    else if(edAnswer1.getText().toString().trim().compareTo("") == 0 || edAnswer2.getText().toString().trim().compareTo("") == 0 || edAnswer3.getText().toString().trim().compareTo("") == 0 || edAnswer4.getText().toString().trim().compareTo("") == 0)
+                        Toast.makeText(getApplicationContext(), "Scrivi tutte le risposte", Toast.LENGTH_LONG).show();
+                        else {
+                            Intent i = new Intent();
+                            i.putExtra("question", edQuestion.getText().toString());
+                            i.putExtra("answer1", edAnswer1.getText().toString());
+                            i.putExtra("answer2", edAnswer2.getText().toString());
+                            i.putExtra("answer3", edAnswer3.getText().toString());
+                            i.putExtra("answer4", edAnswer4.getText().toString());
+                            i.putExtra("correctIndex", correct);
 
-                    api.getAllQuestionsToString();
-
-                    //chiama prossima card vuota
-                    startActivity(new Intent(EditQeA.this, EditQeA.class));
-                }
-            }
-        });
-
- */
-
-        btnNextQ.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(correct == null) {
-                    Toast.makeText(getApplicationContext(), "Seleziona la risposta corretta", Toast.LENGTH_LONG).show();
-                } else {
-
-                    Intent i = new Intent();
-                    i.putExtra("question", edQuestion.getText().toString());
-                    i.putExtra("answer1", edAnswer1.getText().toString());
-                    i.putExtra("answer2", edAnswer2.getText().toString());
-                    i.putExtra("answer3", edAnswer3.getText().toString());
-                    i.putExtra("answer4", edAnswer4.getText().toString());
-                    i.putExtra("correctIndex", correct);
-
-                    setResult(1, i);
-                    finish();
-                }
+                            setResult(1, i);
+                            finish();
+                        }
             }
         });
         //#endregion
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.wtf("2", "onResume" );
-        edAnswer1.setText("");
-        edAnswer2.setText("");
-        edAnswer3.setText("");
-        edAnswer4.setText("");
-        rbAnswer1.setChecked(false);
-        rbAnswer2.setChecked(false);
-        rbAnswer3.setChecked(false);
-        rbAnswer4.setChecked(false);
-
-        api.getAllQuestionsToString();
     }
 
     public DataSourceItem buildDataSourceItem(String q, String a1, String a2, String a3, String a4, String correctA)
