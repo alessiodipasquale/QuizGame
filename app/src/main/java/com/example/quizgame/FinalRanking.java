@@ -3,6 +3,7 @@ package com.example.quizgame;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,8 @@ public class FinalRanking extends AppCompatActivity {
     ArrayList data;
     TextView finalPosition;
     TextView numberOfCorrectAnswer;
+    TextView otherResults;
+
     Integer numberOfQuestions;
     Button goHome;
     @Override
@@ -26,9 +29,11 @@ public class FinalRanking extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final_ranking);
         SocketIoManager ioManager = new SocketIoManager();
-
+        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        SharedPreferences.Editor sharedEditor = sh.edit();
         finalPosition = (TextView) findViewById(R.id.finalPosition);
         numberOfCorrectAnswer = (TextView) findViewById(R.id.numberOfCorrectAnswer);
+        otherResults = (TextView) findViewById(R.id.otherResults);
 
         if(getIntent().hasExtra("players")) {
             try {
@@ -52,6 +57,22 @@ public class FinalRanking extends AppCompatActivity {
                        System.out.println("ENTRO");
                        System.out.println(elem);
                        finalPosition.setText(elem.get("position").toString());
+
+                       Integer best = sh.getInt("best",(Integer)elem.get("position"));
+                       //se non trova l'ultima partita allora uso questa
+                       Integer last = sh.getInt("last",(Integer)elem.get("position"));
+
+                       System.out.println(sh.contains("best"));
+                       System.out.println("Best: "+best);
+                       System.out.println("last: "+last);
+                       sharedEditor.putInt("last", (Integer)elem.get("position"));
+
+                       if ((Integer)elem.get("position") < best) {
+                           sharedEditor.putInt("best", (Integer)elem.get("best"));
+                           best = (Integer)elem.get("best");
+                           System.out.println("Nuovo best: "+best);
+                       }
+                       otherResults.setText("Migliore: "+best+"°, Ultimo: "+last+"°");
                        numberOfCorrectAnswer.setText("Hai indovinato "+elem.get("points") + " risposte.");
                        ioManager.getSocket().disconnect();
                    }
