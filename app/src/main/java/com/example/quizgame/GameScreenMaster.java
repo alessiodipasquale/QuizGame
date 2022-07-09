@@ -64,9 +64,11 @@ public class GameScreenMaster extends AppCompatActivity {
             public  void onFinish(){
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
+                        System.out.println("Now clickable");
                         nextQuestionButton.setEnabled(true);
+                        nextQuestionButton.setClickable(true);
                     }
-                }, 4000);
+                }, 2000);
             }
         };
 
@@ -128,6 +130,7 @@ public class GameScreenMaster extends AppCompatActivity {
         backToHome = (Button) findViewById(R.id.backToHome);
 
         nextQuestionButton.setEnabled(false);
+        nextQuestionButton.setClickable(false);
         backToHome.setVisibility(View.INVISIBLE);
         addQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +157,8 @@ public class GameScreenMaster extends AppCompatActivity {
                         public void run() {
                             TextView currentQuestion = findViewById(R.id.currentQuestionTv);
                             currentQuestion.setText("Domanda " + (Integer) ack[0]);
+                            nextQuestionButton.setEnabled(false);
+                            nextQuestionButton.setClickable(false);
                             try {
                                 timer.start();
                                 adapter.updateRankings(players, true);
