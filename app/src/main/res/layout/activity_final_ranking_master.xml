@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_blue"
+    android:background="@drawable/gradient_blue_norounded"
     tools:context=".FinalRankingMaster">
 
     <Button
         android:id="@+id/btnFHomeFinalRankingM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/gradient_red"
         android:padding="10dp"
         android:text="Torna alla home"
@@ -23,38 +23,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
     <TextView
         android:id="@+id/txt1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/roboto_bold"
         android:gravity="center"
         android:text="Classifica finale"
         android:textColor="#FFD9AD"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/cardView2"
+        android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.86" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
-        android:layout_width="299dp"
-        android:layout_height="543dp"
+        android:layout_width="296dp"
+        android:layout_height="421dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="11dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:flow_verticalBias="0.4"
+        app:layout_constraintBottom_toTopOf="@+id/btnFHomeFinalRankingM"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/txt1"
+        app:layout_constraintVertical_bias="0.33999997">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -65,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hanno fatto tutti 0 punti!"
-                android:textSize="25sp"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/bcFinalResults"
                 app:layout_constraintStart_toStartOf="parent"
@@ -77,11 +76,14 @@
                 android:id="@+id/bcFinalResults"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:layout_editor_absoluteX="85dp"
-                tools:layout_editor_absoluteY="0dp">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="0dp">
 
             </com.github.mikephil.charting.charts.BarChart>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

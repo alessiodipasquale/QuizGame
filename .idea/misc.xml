@@ -12,18 +12,15 @@
         <entry key="..\:/Users/letiz/Desktop/Nuova cartella/QuizGame/app/src/main/res/layout/edit_question_card.xml" value="0.25" />
         <entry key="..\:/Users/letiz/Desktop/Nuova cartella/QuizGame/app/src/main/res/layout/question_card.xml" value="0.14722222222222223" />
         <entry key="..\:/Users/letiz/Desktop/Nuova cartella/QuizGame/app/src/main/res/layout/question_visualizer.xml" value="0.5" />
-        <entry key="..\:/Users/letiz/Desktop/lab mobili/QuizGame/app/src/main/res/layout/activity_choose_lobby.xml" value="0.2798913043478261" />
-        <entry key="..\:/Users/letiz/Desktop/lab mobili/QuizGame/app/src/main/res/layout/activity_configure_game.xml" value="0.2798913043478261" />
         <entry key="..\:/Users/letiz/Desktop/lab mobili/QuizGame/app/src/main/res/layout/activity_final_ranking.xml" value="0.33" />
-        <entry key="..\:/Users/letiz/Desktop/lab mobili/QuizGame/app/src/main/res/layout/activity_final_ranking_master.xml" value="0.25" />
         <entry key="..\:/Users/letiz/Desktop/lab mobili/QuizGame/app/src/main/res/layout/activity_game_screen.xml" value="0.15942028985507245" />
         <entry key="..\:/Users/letiz/Desktop/lab mobili/QuizGame/app/src/main/res/layout/activity_game_screen_master.xml" value="0.21302083333333333" />
-        <entry key="..\:/Users/letiz/Desktop/lab mobili/QuizGame/app/src/main/res/layout/activity_loading_screen.xml" value="0.358695652173913" />
         <entry key="..\:/Users/letiz/Desktop/lab mobili/QuizGame/app/src/main/res/layout/activity_main.xml" value="0.103596757852077" />
         <entry key="..\:/Users/letiz/Desktop/lab mobili/QuizGame/app/src/main/res/layout/activity_waiting_room.xml" value="0.14722222222222223" />
         <entry key="..\:/Users/letiz/Desktop/lab mobili/QuizGame/app/src/main/res/layout/edit_question_card.xml" value="0.18802083333333333" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/gradient_blue.xml" value="0.3545" />
+        <entry key="app/src/main/res/drawable/gradient_blue_norounded.xml" value="0.1745" />
         <entry key="app/src/main/res/drawable/gradient_red.xml" value="0.3305" />
         <entry key="app/src/main/res/drawable/gradient_red_norounded.xml" value="0.211" />
         <entry key="app/src/main/res/drawable/gradient_red_rb.xml" value="0.19" />
@@ -41,6 +38,7 @@
         <entry key="app/src/main/res/layout/activity_choose_role.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/activity_configure_game.xml" value="0.39616241455078116" />
         <entry key="app/src/main/res/layout/activity_final_ranking.xml" value="0.46355685131195334" />
+        <entry key="app/src/main/res/layout/activity_final_ranking_master.xml" value="0.20491321006517726" />
         <entry key="app/src/main/res/layout/activity_game_screen.xml" value="0.36993103027343754" />
         <entry key="app/src/main/res/layout/activity_game_screen_master.xml" value="0.3621261596679687" />
         <entry key="app/src/main/res/layout/activity_loading_screen.xml" value="0.2" />
