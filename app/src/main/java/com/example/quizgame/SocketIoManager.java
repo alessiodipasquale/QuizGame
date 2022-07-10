@@ -19,15 +19,12 @@ import io.socket.emitter.Emitter;
 public class SocketIoManager {
     private static Socket socket = null;
 
-
-
     public void goToHome(Context context) {
         Intent i = new Intent(context, MainActivity.class);
         // set the new task and clear flags
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(context, i, null);
     }
-
 
     public void connect(String ip) {
         IO.Options options = IO.Options.builder()
@@ -37,7 +34,6 @@ public class SocketIoManager {
 
         try {
             if (this.socket == null) {
-                System.out.println(ip);
                 this.socket = IO.socket(ip, options);
                 this.socket.connect();
             } else {
@@ -55,12 +51,7 @@ public class SocketIoManager {
         }
     }
 
-    /*public void disconnect() {
-        this.socket.disconnect();
-    }*/
-
     public Socket getSocket() {
         return socket;
     }
-
 }

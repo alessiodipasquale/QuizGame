@@ -36,29 +36,16 @@ public class EditQeA extends AppCompatActivity {
     Button btnFinish;
     Button btnNextQ;
 
-    static WebApiController api;
-
     Integer correct = 0;
-    //#endregion
-
     String id;
     String name;
     Integer numberOfPlayers;
+    //#endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_question_card);
-/*
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            this.id = extras.getString("id");
-            this.name = extras.getString("name");
-            //magari cambia string con int
-            this.numberOfPlayers = extras.getInt("numberOfPlayers");
-        }
-*/
-        this.api = new WebApiController();
 
         //#region Declatarion
         edQuestion = findViewById(R.id.edQuestion);
@@ -126,7 +113,6 @@ public class EditQeA extends AppCompatActivity {
             }
         });
         //#endregion
-
     }
 
     public DataSourceItem buildDataSourceItem(String q, String a1, String a2, String a3, String a4, String correctA)
@@ -152,6 +138,5 @@ public class EditQeA extends AppCompatActivity {
 
         DataSourceItem question = new DataSourceItem(q, answers);
         return question;
-
     }
 }

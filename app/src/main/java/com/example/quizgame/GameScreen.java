@@ -24,37 +24,34 @@ public class GameScreen extends AppCompatActivity {
     String actualQuestion;
     Button selectedButton;
     int responseIndex = 5;
+
+    Boolean gameEnded = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-
-
-        Intent i = getIntent();
-        id = i.getExtras().getString("id");
 
         TextView questionTv = (TextView) findViewById(R.id.questionTv);
         Button answer1 = (Button) findViewById(R.id.answer1);
         Button answer2 = (Button) findViewById(R.id.answer2);
         Button answer3 = (Button) findViewById(R.id.answer3);
         Button answer4 = (Button) findViewById(R.id.answer4);
-
         timerTv= (TextView) findViewById(R.id.timer);
+
+        SocketIoManager ioManager = new SocketIoManager();
+
+        Intent i = getIntent();
+        id = i.getExtras().getString("id");
 
         CountDownTimer timer = new CountDownTimer(10000, 1000){
             public void onTick(long millisUntilFinished){
-                System.out.println(String.valueOf(millisUntilFinished / 1000));
                 timerTv.setText(String.valueOf(millisUntilFinished / 1000));
             }
             public  void onFinish(){
-                //Da capire
             }
         };
-
         timer.start();
-
-        SocketIoManager ioManager = new SocketIoManager();
 
         ioManager.getSocket().on("endTimer", args -> {
             JSONObject obj = new JSONObject();
@@ -66,13 +63,11 @@ public class GameScreen extends AppCompatActivity {
                 e.printStackTrace();
             }
             ioManager.getSocket().emit("sendAnswer", obj, (Ack) res -> {
-                System.out.println("SENDANSWER");
-
                 runOnUiThread(new Runnable() {
                     public void run() {
                         try {
                             JSONArray correct = (JSONArray) res[0];
-                            System.out.println(correct);
+
                             if(correct.getBoolean(0)) {
                                 selectedButton.setEnabled(true);
                                 selectedButton.setBackgroundResource(R.drawable.green_border);
@@ -96,7 +91,6 @@ public class GameScreen extends AppCompatActivity {
                                                 answer1.setBackgroundResource(R.drawable.red_border);
                                                 answer3.setBackgroundResource(R.drawable.red_border);
                                                 answer4.setBackgroundResource(R.drawable.red_border);
-
                                             }
                                             break;
                                         case 3:
@@ -113,35 +107,52 @@ public class GameScreen extends AppCompatActivity {
                                                 answer1.setBackgroundResource(R.drawable.red_border);
                                                 answer2.setBackgroundResource(R.drawable.red_border);
                                                 answer3.setBackgroundResource(R.drawable.red_border);
-
                                             }
                                             break;
                                     }
-
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
-                                Intent i = new Intent(GameScreen.this, WaitingForQuestion.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                i.putExtra("id",id);
-                                startActivity(i);
-                                finish();
-                                ioManager.getSocket().on("endTimer", args -> {
-                                });
+                                if(!gameEnded)
+                                {
+                                    Intent i = new Intent(GameScreen.this, WaitingForQuestion.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    i.putExtra("id", id);
+                                    startActivity(i);
+                                    finish();
+                                    ioManager.getSocket().on("endTimer", args -> {});
                                 }
+                            }
                         }, 2000); // 5 seconds
                     }
                 });
+            });
+        });
 
+        ioManager.getSocket().on("question", args -> {
+            Intent intent = new Intent(GameScreen.this, GameScreen.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("question", args[0].toString());
+            intent.putExtra("id", id);
+            startActivity(intent);
+        });
+
+        ioManager.getSocket().on("gameEnded", args -> {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    gameEnded = true;
+                    Intent i = new Intent(GameScreen.this, FinalRanking.class);
+                    i.putExtra("players", args[0].toString());
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }
             });
         });
 
         if(getIntent().hasExtra("question")) {
-            System.out.println("QUESTION DA GAMESCREEN");
             try {
                 JSONObject response = new JSONObject(getIntent().getStringExtra("question"));
                 actualQuestion = response.get("question").toString();
@@ -154,7 +165,6 @@ public class GameScreen extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
 
         answer1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,9 +217,5 @@ public class GameScreen extends AppCompatActivity {
                 selectedButton = answer4;
             }
         });
-
-
-
-
     }
 }

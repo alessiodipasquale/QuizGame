@@ -13,6 +13,8 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class LoadingScreen extends AppCompatActivity {
     String id;
+    SocketIoManager ioManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,22 +22,17 @@ public class LoadingScreen extends AppCompatActivity {
 
         Intent thisInt = getIntent();
         id = thisInt.getExtras().getString("id");
-        System.out.println("ID: "+id);
 
-        SocketIoManager ioManager = new SocketIoManager();
-
-
+        ioManager = new SocketIoManager();
         ioManager.getSocket().on("question", args -> {
-            System.out.println("QUESTION");
-            System.out.println("ID QUESTION"+id);
             Intent i = new Intent(LoadingScreen.this, GameScreen.class);
             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.putExtra("question",args[0].toString());
-            i.putExtra("id",id);
+            i.putExtra("question", args[0].toString());
+            i.putExtra("id", id);
             startActivity(i);
         });
 
-            ioManager.getSocket().on("gameStoppedByAdmin", args -> {
+        ioManager.getSocket().on("gameStoppedByAdmin", args -> {
             runOnUiThread(new Runnable() {
                 public void run() {
                     Toast.makeText(getApplicationContext(), "Partita interrotta dall'Admin.", Toast.LENGTH_LONG).show();
@@ -46,8 +43,11 @@ public class LoadingScreen extends AppCompatActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         });
+    }
 
-        }
-
-
+    @Override
+    public void onBackPressed() {
+        if(ioManager.getSocket().connected()) { ioManager.getSocket().disconnect(); }
+        super.onBackPressed();
+    }
 }

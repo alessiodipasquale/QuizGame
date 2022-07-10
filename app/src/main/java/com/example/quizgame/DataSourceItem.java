@@ -35,6 +35,4 @@ public class DataSourceItem {
             this.isCorrect = c;
         }
     }
-
-
 }

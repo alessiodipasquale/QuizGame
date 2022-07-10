@@ -25,13 +25,14 @@ public class MainActivity extends AppCompatActivity{
 
     CheckBox production;
     EditText etIpAddress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         instantiateButton();
-        production =(CheckBox)findViewById(R.id.production);
-        etIpAddress =(EditText) findViewById(R.id.etIpAddress);
+        production = findViewById(R.id.production);
+        etIpAddress = findViewById(R.id.etIpAddress);
 
         production.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -45,39 +46,26 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        SocketIoManager ioManager = new SocketIoManager();
-        //ioManager.disconnect();
-        super.onDestroy();
-    }
-
     public void instantiateButton() {
-        Button btn = (Button) findViewById(R.id.startPlay);
+        Button btn = findViewById(R.id.startPlay);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(isConnected()) {
-                    //Toast.makeText(getApplicationContext(), "INTERNET AVAILABLE", Toast.LENGTH_SHORT).show();
                     try {
                         SocketIoManager ioManager = new SocketIoManager();
                         EditText ipAddress = (EditText) findViewById(R.id.etIpAddress);
                         if (ioManager.getSocket()!= null && ioManager.getSocket().connected()) {
                             startActivity(new Intent(MainActivity.this, ChooseRole.class));
                         } else {
-                            String i= ipAddress.getText().toString();
+                            String i = ipAddress.getText().toString();
                             ioManager.connect(ipAddress.getText().toString());
                             ioManager.getSocket().on(Socket.EVENT_CONNECT, (ok) -> {
                                 startActivity(new Intent(MainActivity.this, ChooseRole.class));
                             });
                         }
-                    } catch (Error e) {
-                        // TODO Auto-generated catch block
-                        Toast.makeText(getApplicationContext(), "Errore nella connessione al server.", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Internet non disponibile.", Toast.LENGTH_SHORT).show();
-                }
+                    } catch (Error e) { Toast.makeText(getApplicationContext(), "Errore nella connessione al server.", Toast.LENGTH_LONG).show(); }
+                } else { Toast.makeText(getApplicationContext(), "Internet non disponibile.", Toast.LENGTH_SHORT).show(); }
             }
         });
     }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,11 +17,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class FinalRanking extends AppCompatActivity {
+    SharedPreferences sh;
+    SharedPreferences.Editor sharedEditor;
+
     JSONArray players;
     ArrayList data;
     TextView finalPosition;
     TextView numberOfCorrectAnswer;
     TextView otherResults;
+    TextView otherResults2;
 
     Integer numberOfQuestions;
     Button goHome;
@@ -29,11 +34,14 @@ public class FinalRanking extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final_ranking);
         SocketIoManager ioManager = new SocketIoManager();
-        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
-        SharedPreferences.Editor sharedEditor = sh.edit();
+        sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        sharedEditor = sh.edit();
         finalPosition = (TextView) findViewById(R.id.finalPosition);
         numberOfCorrectAnswer = (TextView) findViewById(R.id.numberOfCorrectAnswer);
         otherResults = (TextView) findViewById(R.id.otherResults);
+        otherResults2 = (TextView) findViewById(R.id.otherResults2);
+
+        Toast.makeText(getApplicationContext(), "Partita terminata.", Toast.LENGTH_LONG).show();
 
         if(getIntent().hasExtra("players")) {
             try {
@@ -44,40 +52,54 @@ public class FinalRanking extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            System.out.println(players);
-
-            System.out.println(ioManager.getSocket().id());
             String socketId = ioManager.getSocket().id();
             try {
-               for(int i=0; i<players.length(); i++) {
+               for(int i = 0; i < players.length(); i++) {
                    JSONObject elem = (JSONObject) players.get(i) ;
-                   System.out.println(elem);
-                   System.out.println(elem.get("id"));
                    if(socketId.compareTo((String)elem.get("id")) == 0) {
-                       System.out.println("ENTRO");
-                       System.out.println(elem);
-                       finalPosition.setText(elem.get("position").toString());
 
-                       Integer best = sh.getInt("best",(Integer)elem.get("position"));
-                       //se non trova l'ultima partita allora uso questa
-                       Integer last = sh.getInt("last",(Integer)elem.get("position"));
+                       Integer currentPosition = elem.getInt("position");
+                       otherResults.setText("Migliore posizione raggiunta:" + currentPosition + "°,");
+                       otherResults2.setText("Ultima raggiunta:" + currentPosition + "°,");
 
-                       System.out.println(sh.contains("best"));
-                       System.out.println("Best: "+best);
-                       System.out.println("last: "+last);
-                       sharedEditor.putInt("last", (Integer)elem.get("position"));
+                       finalPosition.setText(currentPosition.toString());
 
-                       if ((Integer)elem.get("position") < best) {
-                           sharedEditor.putInt("best", (Integer)elem.get("best"));
-                           best = (Integer)elem.get("best");
-                           System.out.println("Nuovo best: "+best);
+                       if(sh.contains("best"))
+                       {
+                           Integer oldBest = sh.getInt("best", 0);
+                           if (currentPosition <= oldBest) {
+                               sharedEditor.putInt("best", currentPosition);
+                               sharedEditor.commit();
+                               otherResults.setText("Migliore posizione raggiunta:" + currentPosition + "°,");
+                           }  else { otherResults.setText("Migliore posizione raggiunta:" + oldBest + "°,"); }
                        }
-                       otherResults.setText("Migliore: "+best+"°, Ultimo: "+last+"°");
-                       numberOfCorrectAnswer.setText("Hai indovinato "+elem.get("points") + " risposte.");
+                       else
+                       {
+                           sharedEditor.putInt("best", currentPosition);
+                           sharedEditor.commit();
+                           otherResults.setText("Migliore posizione raggiunta:" + currentPosition + "°,");
+                       }
+
+                       if(sh.contains("last"))
+                       {
+                           Integer oldLast = sh.getInt("last", currentPosition);
+                           otherResults2.setText("Ultima raggiunta:" + oldLast + "°");
+
+                           sharedEditor.putInt("last", currentPosition);
+                           sharedEditor.commit();
+                       }
+                       else
+                       {
+                           otherResults2.setText("Ultima raggiunta:" + currentPosition + "°");
+
+                           sharedEditor.putInt("last", currentPosition);
+                           sharedEditor.commit();
+                       }
+
+                       numberOfCorrectAnswer.setText("Hai indovinato " + elem.get("points") + " risposte.");
                        ioManager.getSocket().disconnect();
                    }
                }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -92,7 +114,5 @@ public class FinalRanking extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 }

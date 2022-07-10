@@ -68,7 +68,7 @@ public class RankingAdapter extends BaseAdapter {
                     valB = (Integer) b.get(KEY_NAME);
                 }
                 catch (JSONException e) {
-                    //do something
+                    e.printStackTrace();
                 }
 
                 return -valA.compareTo(valB);
@@ -77,13 +77,8 @@ public class RankingAdapter extends BaseAdapter {
             }
         });
 
-        for (int i = 0; i < newRanking.length(); i++) {
-            sortedJsonArray.put(jsonValues.get(i));
-        }
+        for (int i = 0; i < newRanking.length(); i++) { sortedJsonArray.put(jsonValues.get(i));  }
         this.players = sortedJsonArray;
-
-        System.out.println(sortedJsonArray);
-
         this.notifyDataSetChanged();
     }
 
@@ -117,5 +112,4 @@ public class RankingAdapter extends BaseAdapter {
         }
         return view;
     }
-
 }

@@ -61,30 +61,32 @@ public class ChooseLobby extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String name = input.getText().toString();
-                        try {
-                            for (int i = 0; i < items.length(); i++) {
-                                JSONObject elem = (JSONObject) items.getJSONObject(i);
+                        if(name.trim().compareTo("") != 0){
+                            try {
+                                for (int i = 0; i < items.length(); i++) {
+                                    JSONObject elem = (JSONObject) items.getJSONObject(i);
 
-                                String listElem = list.get(i).toString();
-                                String elemName = elem.get("name").toString();
+                                    String listElem = list.get(i).toString();
+                                    String elemName = elem.get("name").toString();
 
-                                if ( listElem == elemName) {
-                                    System.out.println(elem);
-                                    System.out.println(list.get(i));
-                                    JSONObject data = new JSONObject();
-                                    data.put("id", elem.get("id"));
-                                    data.put("name",name);
-                                    Intent intent = new Intent(ChooseLobby.this, LoadingScreen.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    intent.putExtra("id",elem.get("id").toString());
-                                    ioManager.getSocket().emit("joinGame", data, (Ack)args -> {
-                                        startActivity(intent);
-                                    });
+                                    if ( listElem == elemName) {
+                                        JSONObject data = new JSONObject();
+                                        data.put("id", elem.get("id"));
+                                        data.put("name",name);
+                                        Intent intent = new Intent(ChooseLobby.this, LoadingScreen.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        intent.putExtra("id",elem.get("id").toString());
+                                        ioManager.getSocket().emit("joinGame", data, (Ack)args -> {
+                                            startActivity(intent);
+                                        });
+                                    }
                                 }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
+                        else
+                        { Toast.makeText(getApplicationContext(), "Inserisci un nome.", Toast.LENGTH_LONG).show(); }
                     }
                 });
                 builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
@@ -93,9 +95,7 @@ public class ChooseLobby extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-
                 builder.show();
-
             }
         });
 
@@ -103,11 +103,9 @@ public class ChooseLobby extends AppCompatActivity {
          ioManager.getSocket().emit("getJoinableGames", null, args -> {
 
             JSONArray response = (JSONArray) args[0];
-
             this.items = response;
 
             runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
                     for (int i = 0; i < items.length(); i++) {
@@ -120,31 +118,21 @@ public class ChooseLobby extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-
-
                 }
             });
-
-                //System.out.println(response.getJSONObject(0).get("name"));
-            });
+         });
         else
+        {
             ioManager.goToHome(ChooseLobby.this);
-
+        }
 
         ioManager.getSocket().on("newJoinableGame",  args -> {
-
-
             JSONObject response = (JSONObject) args[0];
-            System.out.println(response);
-
             items.put(response);
             runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
-
                         try {
-
                             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                             list.add(response.get("name"));
                             adapter.notifyDataSetChanged();
@@ -152,21 +140,13 @@ public class ChooseLobby extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-
-
                 }
             });
-
-            //System.out.println(response.getJSONObject(0).get("name"));
         });
 
         ioManager.getSocket().on("gameNowPlaying", args -> {
             String name = (String) args[0];
-
-            System.out.println(name);
             runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
                     if (list.contains(name)) {
@@ -176,10 +156,8 @@ public class ChooseLobby extends AppCompatActivity {
                     }
                     if(list.size() == 0)
                         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-
                 }
             });
-
         });
 
         ioManager.getSocket().on("gameDeletedByAdmin", args -> {
@@ -207,25 +185,3 @@ public class ChooseLobby extends AppCompatActivity {
         });
     }
 }
-
-/*
-for (int i = 1; i <= 20; i++) {
-    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT);
-    Button btn = new Button(this);
-    btn.setId(i);
-    final int id_ = btn.getId();
-    btn.setText("button " + id_);
-    btn.setBackgroundColor(Color.rgb(70, 80, 90));
-    linear.addView(btn, params);
-    btn1 = ((Button) findViewById(id_));
-    btn1.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View view) {
-            Toast.makeText(view.getContext(),
-                    "Button clicked index = " + id_, Toast.LENGTH_SHORT)
-                    .show();
-        }
-    });
-}
- */

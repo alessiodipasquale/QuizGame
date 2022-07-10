@@ -49,6 +49,13 @@ public class ConfigureGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configure_game);
         context = getBaseContext();
+        ioManager = new SocketIoManager();
+
+        etGameName = findViewById(R.id.etGameName);
+        etNumberPlayers = findViewById(R.id.etNumberPlayers);
+        rvQuestions = findViewById(R.id.rvQuestionContainer);
+        btnNewQuestion = findViewById(R.id.btnNewQuestion);
+        btnPlay = findViewById(R.id.btnPlay);
 
         ActivityResultLauncher<Intent> activityResultLauncher;
         activityResultLauncher = registerForActivityResult(
@@ -57,13 +64,10 @@ public class ConfigureGame extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == 1) {
-                            // There are no request codes
                             Intent i = result.getData();
                             Bundle dati = i.getExtras();
                             Integer correctAnswer = dati.getInt("correctIndex");
                             String question = dati.getString("question");
-
-                            Log.wtf("2", "onActivityResult: question: " + question + " correct: " + correctAnswer );
 
                             ArrayList<DataSourceItem.Answer> answers = new ArrayList<DataSourceItem.Answer>();
                             answers.add(new DataSourceItem.Answer(dati.getString("answer1"), correctAnswer == 1));
@@ -77,7 +81,6 @@ public class ConfigureGame extends AppCompatActivity {
                     }
                 });
 
-        ioManager = new SocketIoManager();
         if(ioManager.getSocket().connected())
             ioManager.getSocket().emit("createGame", null, args -> {
                 this.gameId = (String) args[0];
@@ -85,49 +88,54 @@ public class ConfigureGame extends AppCompatActivity {
         else
             ioManager.goToHome(ConfigureGame.this);
 
-        etGameName = findViewById(R.id.etGameName);
-        etNumberPlayers = findViewById(R.id.etNumberPlayers);
-        rvQuestions = findViewById(R.id.rvQuestionContainer);
-        btnNewQuestion = findViewById(R.id.btnNewQuestion);
-        btnPlay = findViewById(R.id.btnPlay);
-
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gameName = etGameName.getText().toString();
                 numberOfPlayers = etNumberPlayers.getText().toString();
 
-                JSONObject item = new JSONObject();
-                try {
-                    item.put("id", gameId);
-                    item.put("name", gameName);
-                    item.put("numberOfPlayers", numberOfPlayers);
-                    item.put("questions", prepareQuestionForServer(questionAdapter.getQuestions()));
+                if(questionAdapter.getQuestions().size() > 0 && gameName.trim().compareTo("") != 0) {
+                    JSONObject item = new JSONObject();
+                    try {
+                        item.put("id", gameId);
+                        item.put("name", gameName);
+                        item.put("numberOfPlayers", numberOfPlayers);
+                        item.put("questions", prepareQuestionForServer(questionAdapter.getQuestions()));
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (ioManager.getSocket().connected())
+                        ioManager.getSocket().emit("configureGame", item, (Ack) args -> {
+                            JSONObject response = (JSONObject) args[0];
+
+                            if (response.has("id")) {
+                                Intent i = new Intent(ConfigureGame.this, WaitingRoom.class);
+                                i.putExtra("id", gameId);
+                                i.putExtra("numberOfPlayers", numberOfPlayers);
+                                startActivity(i);
+                            }
+                            else
+                            {
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "Nome già utilizzato.", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        });
+                    else
+                        ioManager.goToHome(ConfigureGame.this);
                 }
-
-                if(ioManager.getSocket().connected())
-                    ioManager.getSocket().emit("configureGame", item, (Ack) args -> {
-                        JSONObject response = (JSONObject) args[0];
-
-
-                        if (response.has("id")) {
-                            Intent i = new Intent(ConfigureGame.this, WaitingRoom.class);
-                            i.putExtra("id", gameId);
-                            i.putExtra("numberOfPlayers", numberOfPlayers);
-                            startActivity(i);
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), "Nome già utilizzato.", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
-                    });
-                else
-                    ioManager.goToHome(ConfigureGame.this);
+                else {
+                    Toast t = new Toast(context);
+                    if(gameName.trim().compareTo("") == 0)
+                        t.setText("Inserisci un nome");
+                    else
+                        t.setText("Inserisci almeno una domanda");
+                    t.show();
+                }
             }
         });
 
@@ -147,7 +155,6 @@ public class ConfigureGame extends AppCompatActivity {
         JSONArray allQuestionsInJsonArray = new JSONArray();
 
         for (DataSourceItem question : questions) {
-
             JSONObject q = new JSONObject();
             try {
                 q.put("question",question.getQuestion());
@@ -162,27 +169,7 @@ public class ConfigureGame extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
         }
         return allQuestionsInJsonArray;
-    }
-
-   /* @Override
-    public void onBackPressed() {
-        if(ioManager.getSocket().connected())
-            ioManager.getSocket().emit("disconnect", (Ack) args -> {
-                Log.wtf("2", "onBackPressed: disconnesso");
-            });
-            super.onBackPressed();
-    }*/
-
-    @Override
-    protected void onDestroy() {
-        System.out.println("onDestroy");
-        SocketIoManager ioManager = new SocketIoManager();
-        //ioManager.disconnect();
-        ioManager.goToHome(ConfigureGame.this);
-        super.onDestroy();
     }
 }
